@@ -1,0 +1,213 @@
+---
+title: "Linux Networking Management"
+description: "Learn how to manage networking in Linux, including configuring interfaces, IP addresses, routes, DNS, and network services."
+date: "2025-11-12"
+---
+
+# Linux Networking Management
+
+Networking management is a core part of Linux system administration. It involves configuring network interfaces, managing IP addresses, routes, DNS, and services to ensure proper connectivity and communication between devices.
+
+Efficient network management ensures secure and reliable data transmission across systems and networks.
+
+---
+
+## Table of Contents
+1. [Network Concepts in Linux](#network-concepts-in-linux)
+2. [Network Interfaces](#network-interfaces)
+3. [IP Address Management](#ip-address-management)
+4. [Routing and Gateways](#routing-and-gateways)
+5. [DNS Configuration](#dns-configuration)
+6. [Network Services and Firewalls](#network-services-and-firewalls)
+7. [Network Monitoring](#network-monitoring)
+8. [Conclusion](#conclusion)
+
+---
+
+## Network Concepts in Linux
+
+Linux treats networking as a collection of **interfaces** that connect the system to networks. Each interface can have IP addresses, routes, and settings associated with it.
+
+Key concepts:
+- **Interface**: Hardware or virtual network device (e.g., `eth0`, `ens33`, `lo`)  
+- **IP Address**: Unique identifier for a device on a network  
+- **Subnet**: Network segment defined by an IP range and mask  
+- **Gateway**: Device that routes traffic to other networks  
+- **DNS**: Resolves domain names to IP addresses  
+
+---
+
+## Network Interfaces
+
+### 1. View Network Interfaces
+```bash
+ip addr show
+```
+or
+```bash
+ifconfig -a
+```
+
+### 2. Bring an Interface Up or Down
+```bash
+sudo ip link set eth0 up
+sudo ip link set eth0 down
+```
+
+### 3. Assign an IP Address to an Interface
+```bash
+sudo ip addr add 192.168.1.100/24 dev eth0
+```
+
+### 4. Remove an IP Address
+```bash
+sudo ip addr del 192.168.1.100/24 dev eth0
+```
+
+---
+
+## IP Address Management
+
+### 1. View IP Addresses
+```bash
+ip addr
+```
+
+### 2. Configure Static IP (Temporary)
+```bash
+sudo ip addr add 192.168.1.50/24 dev eth0
+sudo ip route add default via 192.168.1.1
+```
+
+### 3. Configure IP Using Network Configuration Files
+- **Debian/Ubuntu**: `/etc/network/interfaces` or `/etc/netplan/*.yaml`  
+- **RHEL/CentOS**: `/etc/sysconfig/network-scripts/ifcfg-eth0`
+
+### 4. Verify Connectivity
+```bash
+ping 8.8.8.8
+ping google.com
+```
+
+---
+
+## Routing and Gateways
+
+### 1. View Routing Table
+```bash
+ip route show
+```
+or
+```bash
+route -n
+```
+
+### 2. Add a Default Gateway
+```bash
+sudo ip route add default via 192.168.1.1
+```
+
+### 3. Delete a Route
+```bash
+sudo ip route del 192.168.1.0/24
+```
+
+---
+
+## DNS Configuration
+
+DNS resolves domain names into IP addresses. Linux uses `/etc/resolv.conf` for DNS settings.
+
+### 1. View Current DNS Servers
+```bash
+cat /etc/resolv.conf
+```
+
+### 2. Set Temporary DNS Server
+```bash
+sudo nano /etc/resolv.conf
+# add nameserver 8.8.8.8
+```
+
+### 3. Permanent DNS Configuration
+- **Debian/Ubuntu**: Configure in `/etc/netplan/*.yaml`  
+- **RHEL/CentOS**: Configure in `/etc/sysconfig/network-scripts/ifcfg-eth0`
+
+---
+
+## Network Services and Firewalls
+
+### 1. Manage Network Services
+```bash
+sudo systemctl restart networking
+sudo systemctl status NetworkManager
+```
+
+### 2. Firewall Management with `firewalld`
+- Check firewall status:
+```bash
+sudo firewall-cmd --state
+```
+- Open a port:
+```bash
+sudo firewall-cmd --permanent --add-port=80/tcp
+sudo firewall-cmd --reload
+```
+
+### 3. Enable/Disable Services at Boot
+```bash
+sudo systemctl enable NetworkManager
+sudo systemctl disable NetworkManager
+```
+
+---
+
+## Network Monitoring
+
+### 1. Monitor Network Traffic
+```bash
+ip -s link
+```
+or
+```bash
+ifstat
+```
+
+### 2. Check Listening Ports
+```bash
+ss -tuln
+```
+
+### 3. Trace Network Path
+```bash
+traceroute google.com
+```
+
+### 4. Test Bandwidth
+```bash
+ping -c 5 8.8.8.8
+```
+
+---
+
+## Conclusion
+
+Linux networking management is essential for system connectivity and security.  
+By mastering commands like `ip`, `ping`, `traceroute`, and managing services with `systemctl` or firewalls, administrators can ensure efficient network operations.
+
+Key takeaways:
+- Understand interfaces, IPs, subnets, and gateways  
+- Configure static and dynamic IP addresses  
+- Manage DNS and routing  
+- Monitor network traffic and services  
+
+Proper network configuration ensures that Linux systems communicate reliably and securely within local and external networks.
+
+---
+
+## Additional Resources
+
+- [Linux Networking Commands](https://linux.die.net/man/8/ip)  
+- [NetworkManager Documentation](https://wiki.gnome.org/Projects/NetworkManager)  
+- [firewalld Guide](https://firewalld.org/documentation/)  
+- [IP Routing in Linux](https://www.tldp.org/HOWTO/Adv-Routing-HOWTO/)

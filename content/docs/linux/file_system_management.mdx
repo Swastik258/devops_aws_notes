@@ -1,0 +1,226 @@
+---
+title: "File System Management in Linux"
+description: "Learn how to manage the Linux file system, including mounting, partitioning, formatting, and checking file systems."
+date: "2025-11-12"
+---
+
+# File System Management in Linux
+
+The Linux file system is the foundation of how data is stored, organized, and accessed. It defines how files and directories are structured, how storage devices are managed, and how permissions and metadata are applied.
+
+File system management involves tasks such as creating partitions, formatting drives, mounting/unmounting devices, and monitoring disk usage to ensure efficient storage management.
+
+---
+
+## Table of Contents
+1. [Introduction to Linux File Systems](#introduction-to-linux-file-systems)
+2. [Common Linux File System Types](#common-linux-file-system-types)
+3. [Mounting and Unmounting File Systems](#mounting-and-unmounting-file-systems)
+4. [Creating and Managing Partitions](#creating-and-managing-partitions)
+5. [Formatting File Systems](#formatting-file-systems)
+6. [Checking and Repairing File Systems](#checking-and-repairing-file-systems)
+7. [Disk Usage and Monitoring](#disk-usage-and-monitoring)
+8. [Automounting with /etc/fstab](#automounting-with-etc-fstab)
+9. [Conclusion](#conclusion)
+
+---
+
+## Introduction to Linux File Systems
+
+In Linux, everything is represented as a file, including hardware devices and processes. The **root directory (`/`)** is the top of the directory hierarchy, and all other directories branch out from it.
+
+The file system manages:
+- File storage and retrieval  
+- Permissions and ownership  
+- Metadata (timestamps, file size, etc.)  
+- Mount points for devices  
+
+---
+
+## Common Linux File System Types
+
+| File System | Description | Features |
+|--------------|-------------|-----------|
+| **ext2** | Second Extended File System | Basic and stable, lacks journaling |
+| **ext3** | Third Extended File System | Journaling added for reliability |
+| **ext4** | Fourth Extended File System | Most common, supports large files and faster checks |
+| **XFS** | High-performance journaling FS | Excellent for large files and databases |
+| **Btrfs** | Modern FS with snapshots | Copy-on-write, subvolumes, RAID support |
+| **swap** | Virtual memory area | Used for system swap space |
+
+To view mounted file systems:
+```bash
+df -Th
+```
+
+---
+
+## Mounting and Unmounting File Systems
+
+When you insert a storage device (like a USB or external disk), it must be **mounted** to access its contents.
+
+### 1. Mount a File System
+```bash
+sudo mount /dev/sdb1 /mnt
+```
+- `/dev/sdb1` → partition  
+- `/mnt` → mount point (must exist)
+
+### 2. Unmount a File System
+```bash
+sudo umount /mnt
+```
+
+### 3. View Currently Mounted File Systems
+```bash
+mount | column -t
+```
+
+---
+
+## Creating and Managing Partitions
+
+Partitions divide a storage device into separate logical sections.
+
+### 1. List Available Disks and Partitions
+```bash
+sudo fdisk -l
+```
+
+### 2. Create or Modify Partitions
+```bash
+sudo fdisk /dev/sdb
+```
+Interactive options:
+- `n` → new partition  
+- `d` → delete partition  
+- `w` → write changes  
+
+### 3. Use `parted` for Advanced Partitioning
+```bash
+sudo parted /dev/sdb
+```
+
+### 4. Display Partition Table
+```bash
+lsblk
+```
+
+---
+
+## Formatting File Systems
+
+After creating partitions, you must format them with a file system before use.
+
+### 1. Format as ext4
+```bash
+sudo mkfs.ext4 /dev/sdb1
+```
+
+### 2. Format as XFS
+```bash
+sudo mkfs.xfs /dev/sdb1
+```
+
+### 3. Format as FAT32 (for USB drives)
+```bash
+sudo mkfs.vfat -F 32 /dev/sdb1
+```
+
+### 4. Create a Swap Partition
+```bash
+sudo mkswap /dev/sdb2
+sudo swapon /dev/sdb2
+```
+
+---
+
+## Checking and Repairing File Systems
+
+File systems can become corrupted due to unexpected shutdowns or hardware failures. Tools like `fsck` help check and repair issues.
+
+### 1. Check and Repair a File System
+```bash
+sudo fsck /dev/sdb1
+```
+
+### 2. Check Without Making Changes
+```bash
+sudo fsck -n /dev/sdb1
+```
+
+> ⚠️ Always unmount the file system before running `fsck`.
+
+---
+
+## Disk Usage and Monitoring
+
+Monitoring storage space ensures that your system doesn’t run out of disk capacity.
+
+### 1. Check Disk Space Usage
+```bash
+df -h
+```
+
+### 2. View Directory Sizes
+```bash
+du -sh /home/*
+```
+
+### 3. Find Large Files
+```bash
+find / -type f -size +500M
+```
+
+### 4. Interactive Disk Usage Tool
+Install `ncdu` (if not already installed):
+```bash
+sudo apt install ncdu
+ncdu /
+```
+
+---
+
+## Automounting with /etc/fstab
+
+To automatically mount a partition at boot, add an entry to `/etc/fstab`.
+
+### 1. View Current `/etc/fstab`
+```bash
+cat /etc/fstab
+```
+
+### 2. Example Entry
+```
+/dev/sdb1   /data   ext4   defaults   0   2
+```
+
+### 3. Mount All File Systems from `/etc/fstab`
+```bash
+sudo mount -a
+```
+
+> Always back up `/etc/fstab` before making changes.
+
+---
+
+## Conclusion
+
+File system management is an essential part of Linux administration.  
+By understanding how to create, mount, and maintain file systems, administrators can ensure optimal storage performance and data reliability.
+
+Key takeaways:
+- Use `fdisk` or `parted` for partitioning  
+- Use `mkfs` to format partitions  
+- Use `mount` and `/etc/fstab` for access and automounting  
+- Use `fsck` and `df` for maintenance and monitoring  
+
+Proper file system management ensures stability, efficiency, and security in Linux environments.
+
+---
+
+## Additional Resources
+
+- [GNU Coreutils – File System Commands](https://www.gnu.org/software/coreutils/)
+- [Linux man pages: mount, mkfs, fsck, fstab](https://man7.org/linux/man-pages/)
+- [Red Hat Documentation – File System Management](https://access.redhat.com/documentation/)

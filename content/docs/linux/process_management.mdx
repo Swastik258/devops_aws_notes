@@ -1,0 +1,210 @@
+---
+title: "Process Management in Linux"
+description: "Learn how to manage processes in Linux, including viewing, creating, controlling, prioritizing, and terminating processes."
+date: "2025-11-12"
+---
+
+# Process Management in Linux
+
+Process management in Linux is a crucial aspect of system administration. It involves creating, monitoring, and controlling processes — which are running instances of programs on a system. Understanding how to manage processes ensures system stability, efficient resource use, and smooth multitasking.
+
+---
+
+## Table of Contents
+1. [What Is a Process?](#what-is-a-process)
+2. [Viewing Running Processes](#viewing-running-processes)
+3. [Creating and Managing Processes](#creating-and-managing-processes)
+4. [Foreground and Background Processes](#foreground-and-background-processes)
+5. [Process Priorities (Nice and Renice)](#process-priorities-nice-and-renice)
+6. [Terminating Processes](#terminating-processes)
+7. [Monitoring System Processes](#monitoring-system-processes)
+8. [Conclusion](#conclusion)
+
+---
+
+## What Is a Process?
+
+A **process** in Linux is an instance of a running program. Each process is assigned a unique **Process ID (PID)** by the kernel. Processes can be user-initiated (like opening a text editor) or system-initiated (like system daemons).
+
+### Common Process Attributes
+- **PID**: Unique identifier for the process  
+- **PPID**: Parent process ID (the process that started it)  
+- **UID**: User ID of the process owner  
+- **State**: Indicates if the process is running, sleeping, stopped, or zombie  
+- **Priority**: Determines how much CPU time the process gets  
+
+---
+
+## Viewing Running Processes
+
+Linux provides several commands to view active processes and their details.
+
+### 1. `ps` – Process Status
+Displays information about active processes.
+
+```bash
+ps aux
+```
+- `a`: Shows processes for all users  
+- `u`: Displays the process owner  
+- `x`: Includes processes not attached to a terminal
+
+### 2. `top` – Dynamic Real-Time Process Viewer
+Shows running processes, CPU usage, and memory utilization in real time.
+
+```bash
+top
+```
+
+Press:
+- `q` – Quit  
+- `k` – Kill a process  
+- `r` – Change process priority  
+
+### 3. `htop` – Enhanced Interactive Viewer (if installed)
+`htop` provides a colorized, interactive interface.
+
+```bash
+sudo apt install htop
+htop
+```
+
+---
+
+## Creating and Managing Processes
+
+Processes can be started normally or sent to the background.
+
+### 1. Running a Command
+```bash
+firefox
+```
+This runs Firefox in the foreground (terminal is blocked until it’s closed).
+
+### 2. Running a Command in the Background
+```bash
+firefox &
+```
+The `&` operator runs the process in the background and returns the PID.
+
+### 3. Checking Jobs
+```bash
+jobs
+```
+Lists all background jobs in the current shell session.
+
+---
+
+## Foreground and Background Processes
+
+Linux allows you to move processes between foreground and background easily.
+
+### 1. Suspend a Foreground Process
+Press:
+```
+Ctrl + Z
+```
+This stops (pauses) the process and places it in the background.
+
+### 2. Resume a Process in the Background
+```bash
+bg %1
+```
+Resumes the first job (`%1`) in the background.
+
+### 3. Bring a Process to the Foreground
+```bash
+fg %1
+```
+Brings job number 1 back to the foreground.
+
+---
+
+## Process Priorities (Nice and Renice)
+
+Each process has a **priority level** that determines CPU scheduling. Lower values mean higher priority.
+
+### 1. Starting a Process with a Specific Priority
+```bash
+nice -n 10 firefox &
+```
+- Default nice value = 0  
+- Range: `-20` (highest priority) to `19` (lowest priority)
+
+### 2. Changing Priority of a Running Process
+```bash
+sudo renice -n 5 -p 1234
+```
+Changes the priority of process `PID 1234` to `5`.
+
+---
+
+## Terminating Processes
+
+Sometimes a process becomes unresponsive or must be manually stopped.
+
+### 1. Using `kill` with PID
+```bash
+kill 1234
+```
+Sends a `SIGTERM` (signal 15) to terminate process `1234`.
+
+### 2. Forcing Termination
+```bash
+kill -9 1234
+```
+Sends `SIGKILL` (signal 9), which forcefully ends the process.
+
+### 3. Killing by Process Name
+```bash
+pkill firefox
+```
+
+### 4. Killing Multiple Processes by Pattern
+```bash
+killall python
+```
+Terminates all processes with the name `python`.
+
+---
+
+## Monitoring System Processes
+
+### 1. Using `top`
+```bash
+top
+```
+Monitors system resource usage in real time.
+
+### 2. Using `vmstat`
+Displays information about processes, memory, paging, and I/O.
+
+```bash
+vmstat 2
+```
+Updates every 2 seconds.
+
+### 3. Using `pidof`
+Finds the PID of a running process by name.
+
+```bash
+pidof sshd
+```
+
+### 4. Using `pstree`
+Displays processes in a tree format showing parent-child relationships.
+
+```bash
+pstree
+```
+
+---
+
+## Conclusion
+
+Process management is a fundamental part of Linux administration. By mastering commands like `ps`, `top`, `kill`, and `nice`, system administrators can effectively monitor and control system performance, handle unresponsive applications, and maintain system stability.
+
+Understanding how processes work and how to manipulate them provides greater insight into how Linux operates under the hood.
+
+---
+

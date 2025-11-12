@@ -1,0 +1,236 @@
+---
+title: "User and Group Management in Linux"
+description: "Learn how to manage users and groups in Linux, including creating, modifying, deleting, and assigning permissions to users and groups."
+date: "2025-11-12"
+---
+
+# User and Group Management in Linux
+
+User and group management is a fundamental aspect of Linux system administration. It allows administrators to control access, manage permissions, and ensure security through proper user and group configurations.
+
+In Linux, every user and group has unique identifiers, and these are used by the system to determine access rights for files, directories, and system resources.
+
+---
+
+## Table of Contents
+1. [Understanding Users and Groups](#understanding-users-and-groups)
+2. [User Management Commands](#user-management-commands)
+3. [Group Management Commands](#group-management-commands)
+4. [Password and Authentication Management](#password-and-authentication-management)
+5. [Switching Users and Managing Permissions](#switching-users-and-managing-permissions)
+6. [File Ownership and Permissions](#file-ownership-and-permissions)
+7. [Conclusion](#conclusion)
+
+---
+
+## Understanding Users and Groups
+
+Linux is a multi-user system, meaning multiple users can operate on the same system simultaneously. Each user and group is identified by numeric IDs.
+
+### Key Concepts
+- **User ID (UID)**: Unique identifier assigned to each user.
+- **Group ID (GID)**: Identifier assigned to a group.
+- **Root User**: The superuser (UID 0) with full administrative privileges.
+- **Normal Users**: Created by the administrator for general use.
+- **System Users**: Used by services and daemons (e.g., `www-data`, `mysql`).
+
+---
+
+## User Management Commands
+
+Linux provides several commands for managing users.
+
+### 1. Add a New User
+```bash
+sudo adduser john
+```
+Creates a new user `john` and prompts for password and user details.
+
+Alternatively:
+```bash
+sudo useradd -m john
+```
+The `-m` flag creates a home directory for the user.
+
+### 2. Delete a User
+```bash
+sudo deluser john
+```
+Removes the user `john` (but keeps their home directory).
+
+To remove the user **and** their home directory:
+```bash
+sudo deluser --remove-home john
+```
+
+### 3. Modify a User
+```bash
+sudo usermod -aG sudo john
+```
+Adds user `john` to the `sudo` group (granting administrative privileges).
+
+### 4. View User Information
+```bash
+id john
+```
+Displays user ID, primary group, and supplementary groups.
+
+```bash
+finger john
+```
+Shows detailed user information (if the `finger` package is installed).
+
+### 5. Change a Username
+```bash
+sudo usermod -l newname oldname
+```
+
+---
+
+## Group Management Commands
+
+Groups are used to organize users and simplify permission management.
+
+### 1. Add a New Group
+```bash
+sudo addgroup developers
+```
+
+### 2. Delete a Group
+```bash
+sudo delgroup developers
+```
+
+### 3. Add a User to a Group
+```bash
+sudo usermod -aG developers john
+```
+
+### 4. View Group Membership
+```bash
+groups john
+```
+
+### 5. Change a User’s Primary Group
+```bash
+sudo usermod -g developers john
+```
+
+### 6. View All Groups on the System
+```bash
+cat /etc/group
+```
+
+---
+
+## Password and Authentication Management
+
+Passwords are stored securely in `/etc/shadow`, and user information is stored in `/etc/passwd`.
+
+### 1. Set or Change a User Password
+```bash
+sudo passwd john
+```
+
+### 2. Lock or Unlock a User Account
+Lock:
+```bash
+sudo usermod -L john
+```
+Unlock:
+```bash
+sudo usermod -U john
+```
+
+### 3. Expire a User Password (Force Change at Next Login)
+```bash
+sudo passwd -e john
+```
+
+### 4. View Password Status
+```bash
+sudo chage -l john
+```
+
+---
+
+## Switching Users and Managing Permissions
+
+### 1. Switch to Another User
+```bash
+su - john
+```
+The `-` loads the target user’s environment.
+
+### 2. Execute Commands as Another User
+```bash
+sudo -u john command
+```
+
+### 3. Switch to the Root User
+```bash
+sudo su
+```
+Or:
+```bash
+sudo -i
+```
+
+---
+
+## File Ownership and Permissions
+
+Each file and directory in Linux has an associated **owner**, **group**, and **permission set**.
+
+### 1. View Ownership and Permissions
+```bash
+ls -l
+```
+Example output:
+```
+-rw-r--r-- 1 john developers 4096 Nov 12 10:00 report.txt
+```
+- `john` → file owner  
+- `developers` → group  
+- `rw-r--r--` → permissions (owner, group, others)
+
+### 2. Change File Ownership
+```bash
+sudo chown john:developers report.txt
+```
+
+### 3. Change File Permissions
+```bash
+chmod 755 script.sh
+```
+- `7` = read/write/execute (owner)  
+- `5` = read/execute (group)  
+- `5` = read/execute (others)
+
+### 4. Change Permissions Recursively
+```bash
+chmod -R 750 /project
+```
+
+### 5. Symbolic Permission Format
+```bash
+chmod u+x file.sh
+```
+Adds execute permission for the **user**.
+
+---
+
+## Conclusion
+
+User and group management is essential for maintaining security, organizing permissions, and controlling access in a Linux environment.  
+By mastering commands like `adduser`, `usermod`, `passwd`, and `chmod`, administrators can effectively manage users, assign roles, and ensure that the system remains secure and efficient.
+
+Properly structured user and group configurations form the foundation of Linux’s multi-user system model.
+
+---
+
+## Additional Resources
+
+- [GNU Core Utilities – User Commands](https://www.gnu.org/software/coreutils/)
+- [Linux man pages: useradd, usermod, passwd, and groupadd](https://man7.org/linux/man-pages/)
+- [Debian Wiki – User and Group Management](https://wiki.debian.org/UserManagement)

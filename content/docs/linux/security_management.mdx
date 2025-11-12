@@ -1,0 +1,227 @@
+---
+title: "Linux Security Management"
+description: "Learn how to secure Linux systems, including user permissions, file security, firewall configuration, SELinux/AppArmor, and system auditing."
+date: "2025-11-12"
+---
+
+# Linux Security Management
+
+Linux security management is essential to protect systems from unauthorized access, malware, and data breaches. It includes managing users and permissions, configuring firewalls, enforcing access control policies, and auditing system activities.
+
+Strong security practices ensure system integrity, confidentiality, and availability.
+
+---
+
+## Table of Contents
+1. [User and Group Permissions](#user-and-group-permissions)
+2. [File and Directory Security](#file-and-directory-security)
+3. [Firewall Management](#firewall-management)
+4. [SELinux and AppArmor](#selinux-and-apparmor)
+5. [SSH Security](#ssh-security)
+6. [System Auditing and Logging](#system-auditing-and-logging)
+7. [Security Updates](#security-updates)
+8. [Conclusion](#conclusion)
+
+---
+
+## User and Group Permissions
+
+Properly managing users and groups is critical for security.
+
+### 1. View Users
+```bash
+cat /etc/passwd
+```
+
+### 2. Add a User
+```bash
+sudo useradd john
+sudo passwd john
+```
+
+### 3. Delete a User
+```bash
+sudo userdel -r john
+```
+
+### 4. Manage Groups
+```bash
+sudo groupadd developers
+sudo usermod -aG developers john
+```
+
+### 5. Check Permissions
+```bash
+ls -l /home/john
+```
+
+---
+
+## File and Directory Security
+
+Linux uses **permissions and ownership** to control access.
+
+### 1. Change Ownership
+```bash
+sudo chown john:developers /home/john
+```
+
+### 2. Change Permissions
+```bash
+chmod 755 /home/john
+chmod 644 /home/john/file.txt
+```
+
+### 3. Special Permissions
+- **Setuid**: `chmod u+s filename`  
+- **Setgid**: `chmod g+s directory`  
+- **Sticky bit**: `chmod +t /tmp`
+
+### 4. View ACLs
+```bash
+getfacl /home/john
+setfacl -m u:alice:rwx /home/john
+```
+
+---
+
+## Firewall Management
+
+Firewalls protect Linux systems by controlling network traffic.
+
+### 1. Check Firewall Status
+```bash
+sudo firewall-cmd --state
+```
+
+### 2. Open and Close Ports
+```bash
+sudo firewall-cmd --permanent --add-port=22/tcp
+sudo firewall-cmd --permanent --remove-port=23/tcp
+sudo firewall-cmd --reload
+```
+
+### 3. Allow Services
+```bash
+sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --reload
+```
+
+---
+
+## SELinux and AppArmor
+
+Linux uses **Mandatory Access Control (MAC)** systems like SELinux or AppArmor.
+
+### 1. Check SELinux Status
+```bash
+sestatus
+```
+
+### 2. Change SELinux Mode
+```bash
+sudo setenforce 1   # Enforcing
+sudo setenforce 0   # Permissive
+```
+
+### 3. AppArmor Commands
+```bash
+sudo aa-status
+sudo aa-enforce /etc/apparmor.d/usr.sbin.nginx
+```
+
+---
+
+## SSH Security
+
+Secure Shell (SSH) is the primary way to access Linux remotely.
+
+### 1. Configure SSH
+- File: `/etc/ssh/sshd_config`
+- Key settings:
+  - `PermitRootLogin no`  
+  - `PasswordAuthentication no`  
+  - `AllowUsers john alice`
+
+### 2. Restart SSH Service
+```bash
+sudo systemctl restart sshd
+```
+
+### 3. Generate SSH Key Pair
+```bash
+ssh-keygen -t rsa -b 4096
+ssh-copy-id john@remote-server
+```
+
+---
+
+## System Auditing and Logging
+
+Monitoring system activity is essential for detecting breaches.
+
+### 1. View Logs
+```bash
+journalctl -xe
+cat /var/log/auth.log
+```
+
+### 2. Install and Use Auditd
+```bash
+sudo apt install auditd
+sudo systemctl enable auditd
+sudo ausearch -m USER_LOGIN
+```
+
+### 3. Monitor Failed Login Attempts
+```bash
+lastb
+```
+
+---
+
+## Security Updates
+
+Keeping the system updated is vital for protection against vulnerabilities.
+
+### 1. Update Packages (Debian/Ubuntu)
+```bash
+sudo apt update && sudo apt upgrade
+```
+
+### 2. Update Packages (RHEL/Fedora)
+```bash
+sudo dnf upgrade --refresh
+```
+
+### 3. Enable Automatic Security Updates
+```bash
+sudo apt install unattended-upgrades
+sudo dpkg-reconfigure unattended-upgrades
+```
+
+---
+
+## Conclusion
+
+Linux security management is crucial for protecting systems from unauthorized access and threats.  
+By combining user management, permissions, firewalls, SELinux/AppArmor, SSH hardening, auditing, and updates, administrators can ensure a secure Linux environment.
+
+Key takeaways:
+- Manage users and groups carefully  
+- Enforce file and directory permissions  
+- Configure firewalls and access control policies  
+- Secure remote access and monitor logs  
+- Apply regular security updates  
+
+A well-secured Linux system is reliable, resilient, and less prone to attacks.
+
+---
+
+## Additional Resources
+
+- [SELinux Project Documentation](https://selinuxproject.org/page/Main_Page)  
+- [AppArmor Documentation](https://wiki.ubuntu.com/AppArmor)  
+- [Linux Audit Framework](https://linux-audit.com/)  
+- [OpenSSH Documentation](https://www.openssh.com/manual.html)  
+- [Firewalld Documentation](https://firewalld.org/documentation/)
