@@ -1,0 +1,147 @@
+---
+title: What is an IP Address? — The Identity of Every Device
+description: Learn what an IP address is, why it was created, how it works, and the differences between IPv4, IPv6, public, and private IPs.
+---
+
+# 🌐 What is an IP Address?
+
+An **IP address (Internet Protocol address)** is like the **home address of your device on a network**.  
+It helps computers, phones, and servers **find and communicate** with each other over the internet.
+
+Whenever you visit a website, send an email, or watch a video —  
+your device and the server **use IP addresses** to locate and connect to each other.
+
+---
+
+## 🧩 Why IP Addresses Were Created
+
+In the early days of networking, computers needed a way to **identify** and **talk** to one another.
+
+Just like:
+- Your **phone number** helps people call you  
+- Your **home address** helps people send you mail  
+
+An **IP address** helps computers **send data** to the right destination.
+
+Without IP addresses, the internet wouldn’t know **where to deliver** your requests or responses.
+
+---
+
+## 🧠 How IP Addresses Work
+
+Every time you connect to the internet:
+1. Your Internet Service Provider (ISP) gives your device an **IP address**.  
+2. When you open a website (e.g., `www.google.com`), your system uses **DNS (Domain Name System)** to find the **IP address** of Google’s server.  
+3. Then your browser connects to that IP, and data starts flowing between the two devices.
+
+Example:
+
+Here, `142.250.183.14` is the **IP address** of a Google server.
+
+---
+
+## 🧮 Types of IP Addresses
+
+There are **two main types** of IP addresses based on how they are used.
+
+| Type | Description | Example |
+|------|--------------|----------|
+| **Public IP** | Visible on the internet; assigned by your ISP | `49.205.120.15` |
+| **Private IP** | Used inside your home or company network | `192.168.0.1` |
+
+**Public IP** is like your house’s main address.  
+**Private IP** is like room numbers inside the house.
+
+---
+
+## 🌎 Public vs Private IP
+
+| Feature | Public IP | Private IP |
+|----------|------------|-------------|
+| Visibility | Seen by everyone on the internet | Seen only inside local network |
+| Given By | Internet Service Provider (ISP) | Router or network admin |
+| Example Range | `8.8.8.8`, `49.205.120.15` | `192.168.x.x`, `10.x.x.x`, `172.16.x.x` |
+| Use Case | Website hosting, remote access | Home Wi-Fi, internal communication |
+
+---
+
+## 🔢 Versions of IP Addresses
+
+There are **two versions** of IP currently in use — **IPv4** and **IPv6**.
+
+---
+
+### 🌍 IPv4 (Internet Protocol Version 4)
+
+- Created in **1983**
+- Uses **32-bit** addresses  
+- Example: `192.168.1.1`
+- Total possible addresses: **4.3 billion**
+
+Since the internet grew fast, IPv4 started **running out of unique addresses** — that’s why IPv6 was created.
+
+---
+
+### 🌐 IPv6 (Internet Protocol Version 6)
+
+- Introduced in **1998**
+- Uses **128-bit** addresses  
+- Example: `2401:4900:1f36:abc1::10`
+- Total possible addresses: **340 undecillion** (that’s 340 with 36 zeros!)
+
+IPv6 solves the **shortage problem** and adds features like:
+- Better **security**
+- Faster **routing**
+- Built-in **auto-configuration**
+
+---
+
+## 🧭 Static vs Dynamic IP
+
+| Type | Description | Example Use |
+|------|--------------|-------------|
+| **Static IP** | Fixed and doesn’t change | Servers, hosting websites |
+| **Dynamic IP** | Changes every time you connect | Home or mobile networks |
+
+Your ISP usually gives you a **dynamic IP**, but servers or businesses often use **static IPs** so that their address stays the same.
+
+---
+
+## 🕸️ How IPs Work in a Network
+
+Let’s take a simple home Wi-Fi example:
+
+| Device | Private IP | Internet Access |
+|---------|-------------|----------------|
+| Laptop | 192.168.0.10 | ✅ |
+| Mobile | 192.168.0.11 | ✅ |
+| Router | 192.168.0.1 | ✅ (has a Public IP too) |
+
+Your **router** acts like a **translator** between private and public networks — using something called **NAT (Network Address Translation)**.
+
+---
+
+## 🔐 Bonus: IPv4 Address Classes
+
+| Class | Range | Usage |
+|--------|--------|--------|
+| **A** | `1.0.0.0 – 126.255.255.255` | Large networks |
+| **B** | `128.0.0.0 – 191.255.255.255` | Medium networks |
+| **C** | `192.0.0.0 – 223.255.255.255` | Small networks |
+| **D** | `224.0.0.0 – 239.255.255.255` | Multicasting |
+| **E** | `240.0.0.0 – 255.255.255.255` | Research/testing |
+
+---
+
+## 🧾 Summary
+
+- **IP (Internet Protocol) address** = unique number that identifies a device on a network.  
+- **Public IPs** connect you to the internet; **Private IPs** connect local devices.  
+- Two versions exist: **IPv4** (old, limited) and **IPv6** (new, vast).  
+- IPs can be **static** (fixed) or **dynamic** (changes automatically).  
+- Without IP addresses, the internet simply **cannot function** — it’s how devices **find and talk to each other**.
+
+---
+
+🏁 **In short:**  
+> An IP address is the digital identity of every device. It’s what makes the global internet work — connecting billions of computers, servers, and people every second.

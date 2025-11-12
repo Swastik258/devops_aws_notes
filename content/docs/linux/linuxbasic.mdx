@@ -1,0 +1,197 @@
+---
+title: Ubuntu/Linux Command Guide — From Zero to Advanced
+description: Complete step-by-step Linux command notes for beginners to advanced users. Includes examples, scripting, networking, and system management.
+---
+
+# ✅ Ubuntu/Linux Command Guide – From Zero to Advanced
+
+---
+
+## 🧱 1. Basic Commands for Beginners
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `pwd` | Print working directory | `pwd` → `/home/user` |
+| `ls` | List files and folders | `ls -l`, `ls -a` |
+| `cd` | Change directory | `cd /home`, `cd ..` |
+| `clear` | Clears the terminal screen | `clear` |
+| `exit` | Exits the terminal session | `exit` |
+| `echo` | Displays text | `echo "Hello World"` |
+
+---
+
+## 📁 2. File and Directory Operations
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `touch` | Create empty file | `touch file.txt` |
+| `mkdir` | Make directory | `mkdir myfolder` |
+| `rm` | Delete file or folder | `rm file.txt`, `rm -r folder/` |
+| `cp` | Copy files/folders | `cp file1.txt file2.txt`, `cp -r dir1/ dir2/` |
+| `mv` | Move or rename | `mv old.txt new.txt`, `mv file.txt /tmp/` |
+| `cat` | Display file contents | `cat file.txt` |
+| `more` / `less` | Paginate long file | `less file.txt` |
+| `head` | First 10 lines | `head file.txt` |
+| `tail` | Last 10 lines | `tail -f file.txt` (live logs) |
+
+---
+
+## 📂 3. File Permissions & Ownership
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `chmod` | Change permissions | `chmod 755 script.sh` |
+| `chown` | Change ownership | `chown user:group file.txt` |
+| `ls -l` | Check permissions | Shows `-rwxr-xr--` format |
+
+**Permission Chart:**
+
+- `r` = read (4)
+- `w` = write (2)
+- `x` = execute (1)
+
+Example:  
+`chmod 755 file` → Owner: all, Group: read/execute, Others: read/execute
+
+---
+
+## 📦 4. Package Management (APT)
+
+| Command | Description |
+| --- | --- |
+| `sudo apt update` | Updates package list |
+| `sudo apt upgrade` | Upgrades all packages |
+| `sudo apt install package` | Installs package |
+| `sudo apt remove package` | Removes package |
+| `sudo apt purge package` | Removes package + config |
+| `sudo apt autoremove` | Cleans unused dependencies |
+
+---
+
+## 🔍 5. Searching with `grep`
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `grep "text" file` | Search for text | `grep "error" logfile.txt` |
+| `grep -i` | Case insensitive | `grep -i "error"` |
+| `grep -r` | Recursive | `grep -r "main()" ./` |
+| `grep -v` | Exclude pattern | `grep -v "error"` |
+| `grep -n` | Show line number | `grep -n "init"` |
+
+---
+
+## 🧠 6. Advanced Text Processing with `awk`
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `awk '{print $1}' file` | Print first column | Extract usernames from file |
+| `awk -F ":" '{print $1}'` | Use delimiter | `awk -F ":" '{print $1}' /etc/passwd` |
+| `awk '{sum += $2} END {print sum}'` | Sum a column | `awk '{sum += $3} END {print sum}' salaries.txt` |
+
+---
+
+## 📑 7. Redirection & Pipes
+
+| Symbol | Description | Example |
+| --- | --- | --- |
+| `>` | Redirect output (overwrite) | `echo "Hello" > file.txt` |
+| `>>` | Append output | `echo "World" >> file.txt` |
+| `<` | Input from file | `sort < file.txt` |
+| `|` | Pipe output to next cmd | `ls | grep "log"` |
+
+---
+
+## 🧾 8. File Compression
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `tar -cvf` | Create tar file | `tar -cvf archive.tar folder/` |
+| `tar -xvf` | Extract tar file | `tar -xvf archive.tar` |
+| `gzip` | Compress file | `gzip file.txt` |
+| `gunzip` | Decompress file | `gunzip file.txt.gz` |
+| `zip` | Create zip file | `zip archive.zip file1 file2` |
+| `unzip` | Extract zip file | `unzip archive.zip` |
+
+---
+
+## 🧮 9. Disk Usage
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `df -h` | Disk space (human-readable) | — |
+| `du -sh folder/` | Folder size | — |
+| `lsblk` | List block devices | — |
+| `mount` / `umount` | Mount/unmount drives | — |
+
+---
+
+## 🖥️ 10. Process Management
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `ps aux` | List processes | — |
+| `top` | Dynamic process viewer | — |
+| `htop` | Interactive top (install it) | — |
+| `kill PID` | Kill by PID | — |
+| `kill -9 PID` | Force kill | — |
+| `&` | Run in background | `sleep 100 &` |
+| `jobs` | List background jobs | — |
+| `fg` / `bg` | Bring job to foreground/background | — |
+
+---
+
+## 🌐 11. Networking Commands
+
+| Command | Description | Example |
+| --- | --- | --- |
+| `ip a` | Show IP address | — |
+| `ping domain` | Test connectivity | `ping google.com` |
+| `netstat -tulpn` | Show open ports | — |
+| `curl` | Download data | `curl https://example.com` |
+| `wget` | Download files | `wget file_url` |
+| `ifconfig` | Legacy IP tool | — |
+| `nslookup` | DNS lookup | — |
+| `traceroute` | Path of packet | — |
+| `scp` | Secure copy | `scp file.txt user@host:/path` |
+| `ssh` | Remote login | `ssh user@server_ip` |
+
+---
+
+## 🛠️ 12. System & User Info
+
+| Command | Description |
+| --- | --- |
+| `whoami` | Shows current user |
+| `id` | User ID and groups |
+| `hostname` | Machine name |
+| `uptime` | System uptime |
+| `uname -a` | System info |
+| `free -h` | RAM usage |
+| `top` / `htop` | CPU/memory |
+| `history` | Show command history |
+
+---
+
+## 👥 13. User Management
+
+| Command | Description |
+| --- | --- |
+| `adduser username` | Create user |
+| `passwd username` | Set/change password |
+| `deluser username` | Remove user |
+| `usermod -aG group username` | Add user to group |
+| `groups username` | List groups |
+| `su - username` | Switch user |
+| `sudo` | Run as admin/root |
+
+---
+
+## ⚙️ 14. Crontab – Scheduling Jobs
+
+| Command | Description |
+| --- | --- |
+| `crontab -e` | Edit crontab |
+| `crontab -l` | List cron jobs |
+
+**Crontab Format:**
+
