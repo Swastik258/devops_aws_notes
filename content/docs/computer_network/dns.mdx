@@ -1,138 +1,41 @@
 ---
-title: What is DNS? — The Phonebook of the Internet
-description: Learn what DNS is, why it was created, how it works behind the scenes, and why it's essential for connecting domain names to IP addresses.
+title: What is DNS?
+description: Simple explanation of DNS and how it works.
 ---
 
 # 🌐 What is DNS?
 
-**DNS (Domain Name System)** is like the **phonebook of the internet**.
-
-It converts **human-readable domain names** (like `www.google.com`) into **IP addresses** (like `142.250.183.14`) that computers use to identify each other.
-
----
-
-## 🧩 Why DNS Was Created
-
-In the early days of the internet, people had to **remember IP addresses** to visit websites.
-
-Example:  
-To open Google, you’d type:  
-…and DNS automatically finds the correct IP behind it.
+**DNS (Domain Name System)** is like the **phonebook of the internet**.  
+It converts **domain names** (like `google.com`) into **IP addresses** (like `142.250.183.14`), so computers can find each other.
 
 ---
 
-## 🧠 How DNS Works (Step-by-Step)
-
-Here’s what happens when you open a website in your browser 👇
-
-1. **You type** `www.google.com` in your browser.  
-2. The browser checks its **cache** — maybe it already knows the IP.  
-3. If not, it asks your **DNS resolver** (usually provided by your ISP).  
-4. The resolver contacts the **Root DNS server**, which says:
-   > “I don’t know the IP, but `.com` servers might know.”
-5. Then it asks the **Top-Level Domain (TLD)** server for `.com`.
-6. The TLD server says:
-   > “Ask Google’s authoritative DNS server.”
-7. The resolver finally reaches Google’s **authoritative server**, which replies:
-   > “The IP of `www.google.com` is 142.250.183.14.”
-8. The resolver sends that IP back to your browser — and your page loads 🚀
+## 🧠 Why We Need DNS
+Before DNS, people had to remember IPs — which was hard!  
+DNS made it easy by letting us use simple names instead of numbers.
 
 ---
 
-## 📊 DNS Hierarchy
-
-| Level | Example | Purpose |
-|--------|-----------|-----------|
-| **Root DNS Server** | `.` | Knows all top-level domains (like `.com`, `.org`, `.net`) |
-| **TLD Server** | `.com`, `.org`, `.in` | Points to domain-specific servers |
-| **Authoritative DNS Server** | `google.com` | Stores the actual IP record for the domain |
-
-Think of it like:
-> Root → TLD → Authoritative → Final Answer ✅
+## ⚙️ How DNS Works
+1. You type `google.com`.  
+2. Browser asks DNS for the IP.  
+3. DNS finds and returns it.  
+4. Browser connects to that IP — and the website loads 🚀.
 
 ---
 
-## 🔍 Example Flow
+## 📦 Common DNS Record Types
 
-Let’s break down what happens with an example:
-
-| Step | Request | Response |
-|------|----------|-----------|
-| 1 | Browser asks: “Where is `www.amazon.com`?” | Resolver checks cache |
-| 2 | Resolver → Root DNS | “Try `.com` TLD” |
-| 3 | Resolver → `.com` TLD | “Ask Amazon’s server” |
-| 4 | Resolver → Amazon DNS | “Here’s IP: `205.251.242.103`” |
-| 5 | Browser connects to that IP | Page loads! 🌍 |
-
----
-
-## 📦 Types of DNS Records
-
-DNS servers store **records** that define what a domain does.  
-Here are the most common types 👇
-
-| Record Type | Description | Example |
-|--------------|--------------|----------|
-| **A** | Maps domain name to IPv4 address | `example.com → 192.168.1.1` |
-| **AAAA** | Maps domain name to IPv6 address | `example.com → 2401:4900::10` |
-| **CNAME** | Alias (redirects to another name) | `www.example.com → example.com` |
-| **MX** | Mail server record | Sends emails to Gmail, Outlook, etc. |
-| **TXT** | Stores text info (for verification, SPF, DKIM) | Used for domain ownership |
-| **NS** | Lists the authoritative name servers | `ns1.example.com`, `ns2.example.com` |
-
----
-
-## 🧱 Types of DNS Servers
-
-| Server Type | Role |
-|--------------|------|
-| **Recursive Resolver** | Finds the IP address on your behalf |
-| **Root Server** | Directs queries to the correct TLD |
-| **TLD Server** | Handles `.com`, `.org`, `.in`, etc. |
-| **Authoritative Server** | Stores actual IP records for domains |
-
----
-
-## 🔐 DNS Caching
-
-To make browsing faster, DNS responses are **cached** at several levels:
-- Browser cache  
-- Operating system cache  
-- ISP resolver cache  
-
-So if you visit `google.com` again, it loads instantly because your system already knows the IP.
+| Type | Purpose | Example |
+|------|----------|----------|
+| **A** | Domain → IPv4 | `example.com → 192.168.1.1` |
+| **AAAA** | Domain → IPv6 | `example.com → 2401:4900::10` |
+| **CNAME** | Alias | `www → example.com` |
+| **MX** | Email routing | Sends mail to Gmail, etc. |
 
 ---
 
 ## 🧭 Why DNS is Important
-
-Without DNS:
-- We’d need to **memorize IP addresses** instead of names.
-- The internet would be **confusing and difficult** to use.
-- Websites could **not be easily moved or scaled**, since their IP might change.
-
-With DNS:
-✅ Easy to remember domain names  
-✅ Flexible — IP can change anytime  
-✅ Enables fast global communication
-
----
-
-## ⚙️ Bonus: DNS Tools & Commands
-
-You can check DNS records using these commands 👇
-
-```bash
-# Check IP of a domain
-nslookup google.com
-
-# Show all DNS records
-dig google.com ANY
-
-# Flush DNS cache (Windows)
-ipconfig /flushdns
-
-
----
-
-
+- Easy to remember names  
+- Flexible when IPs change  
+- Keeps the internet fast and simple 🌍
