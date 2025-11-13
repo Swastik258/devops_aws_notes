@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-router/node": "^7.9.5",
     "@react-router/serve": "^7.9.5",
+    "@vercel/analytics": "^1.5.0",
     "fumadocs-core": "16.0.10",
     "fumadocs-mdx": "13.0.7",
     "fumadocs-ui": "16.0.10",

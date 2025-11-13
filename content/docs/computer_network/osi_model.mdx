@@ -1,0 +1,120 @@
+---
+title: OSI Model in Computer Networks
+description: Simple notes on the OSI Model explained in easy language for quick understanding.
+---
+
+# 🌐 OSI Model — Computer Networks (Simple Notes)
+
+---
+
+## 🧠 What is OSI Model?
+
+The **OSI (Open Systems Interconnection) Model** is a **standard framework** used to understand how data travels from one computer to another over a network.  
+It was developed by **ISO (International Organization for Standardization)** and divides the communication process into **7 layers**.  
+Each layer has its own job and helps data move smoothly between devices.
+
+---
+
+## ⚙️ Why It’s Important
+
+- Makes communication between different systems possible.  
+- Helps in **troubleshooting** network problems.  
+- Guides **protocol design** and standardization.  
+- Ensures **interoperability** between devices from different vendors.
+
+---
+
+## 🧩 The 7 Layers of OSI Model (Simple Explanation)
+
+| No. | Layer Name | Data Unit | Main Work |
+|-----|-------------|------------|------------|
+| 7️⃣ | **Application Layer** | Data | User interacts with network (browsers, emails). |
+| 6️⃣ | **Presentation Layer** | Data | Converts, encrypts, and compresses data. |
+| 5️⃣ | **Session Layer** | Data | Starts and ends sessions between devices. |
+| 4️⃣ | **Transport Layer** | Segments | Ensures reliable data delivery using TCP/UDP. |
+| 3️⃣ | **Network Layer** | Packets | Finds best route using IP addresses. |
+| 2️⃣ | **Data Link Layer** | Frames | Transfers data between two directly connected devices. |
+| 1️⃣ | **Physical Layer** | Bits | Sends raw bits through cables and signals. |
+
+---
+
+## 🧱 Short Explanation of Each Layer
+
+### 1️⃣ Physical Layer  
+Handles cables, signals, voltage — sends bits (0s and 1s).  
+**Example:** Cables, hubs, repeaters.
+
+### 2️⃣ Data Link Layer  
+Transfers frames between connected devices and fixes basic errors.  
+**Example:** Switches, MAC address, Ethernet.
+
+### 3️⃣ Network Layer  
+Chooses the best path for data (routing) and assigns IP addresses.  
+**Example:** Routers, IP, ICMP.
+
+### 4️⃣ Transport Layer  
+Ensures data reaches correctly and in order.  
+**Example:** TCP (reliable), UDP (fast).
+
+### 5️⃣ Session Layer  
+Opens, manages, and closes communication sessions.  
+**Example:** API connections, Remote calls.
+
+### 6️⃣ Presentation Layer  
+Changes data format and adds encryption or compression.  
+**Example:** SSL/TLS, JPEG, ASCII.
+
+### 7️⃣ Application Layer  
+Provides user services like email, file transfer, and web browsing.  
+**Example:** HTTP, FTP, DNS, SMTP.
+
+---
+
+## 🔄 Data Flow (Encapsulation & Decapsulation)
+
+When sending data, each layer adds its own header (Encapsulation).  
+When receiving, each layer removes its header (Decapsulation).
+
+**Example:**  
+Application → Transport → Network → Data Link → Physical  
+(bits travel through cables)
+
+---
+
+## 📦 Data Unit Names (PDU)
+
+| Layer | PDU |
+|--------|-----|
+| Application–Session | Data |
+| Transport | Segment |
+| Network | Packet |
+| Data Link | Frame |
+| Physical | Bits |
+
+---
+
+## 🧠 Easy Mnemonics
+
+- **Top to Bottom:** *All People Seem To Need Data Processing*  
+- **Bottom to Top:** *Please Do Not Throw Sausage Pizza Away*
+
+---
+
+## 🔗 OSI vs TCP/IP
+
+| Feature | OSI Model | TCP/IP Model |
+|----------|------------|--------------|
+| Layers | 7 | 4 |
+| Type | Theoretical | Practical |
+| Example Protocols | HTTP, FTP, TCP, IP | Same protocols used |
+| Creator | ISO | Department of Defense (DoD) |
+
+---
+
+## 📘 Summary
+
+- OSI Model has **7 layers**, each handling a specific part of data transfer.  
+- Helps in **understanding**, **designing**, and **debugging** networks.  
+- Acts as the **foundation of modern networking**.
+
+✅ **In short:** OSI Model explains how data travels from one device to another step by step.
