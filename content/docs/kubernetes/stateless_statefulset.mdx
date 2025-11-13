@@ -1,0 +1,187 @@
+---
+
+title: StatefulSet vs Deployment (Stateless vs Stateful Applications in Kubernetes)
+description: Detailed explanation of stateless and stateful applications in Kubernetes, the difference between Deployment and StatefulSet, and when to use which, with YAML examples.
+
+---
+
+# 🧩 Stateless vs Stateful Applications in Kubernetes
+
+---
+
+## 🧠 What Is a Stateless Application?
+
+A **stateless** application does **not store any data** or session information inside the Pod.
+Each request is **independent**, and the app doesn’t rely on previous interactions.
+
+If a Pod crashes or is recreated, it doesn’t affect the user because there’s **no local state to lose**.
+
+### ✅ Examples:
+
+* Web frontends (React, Angular)
+* REST APIs
+* Load balancers
+* Microservices that fetch data from databases
+
+---
+
+### ⚙️ Deployment — For Stateless Apps
+
+In Kubernetes, **Deployments** are used for stateless workloads.
+They can easily scale up or down, and all Pods are **identical** — no Pod is unique.
+
+#### Example: Stateless Nginx Deployment
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+```
+
+Here:
+
+* All Pods share the same configuration.
+* If a Pod fails, a new identical one is created automatically.
+* No persistent data is stored inside the Pod.
+
+---
+
+## 🧠 What Is a Stateful Application?
+
+A **stateful** application maintains **data, identity, or session information**.
+Each Pod has a **unique identity** and **persistent storage** that must survive restarts or rescheduling.
+
+Kubernetes uses **StatefulSet** to manage these types of applications.
+
+### ✅ Examples:
+
+* Databases: MySQL, PostgreSQL, MongoDB
+* Message brokers: Kafka, RabbitMQ
+* Storage systems: Cassandra, Redis (in persistence mode)
+
+---
+
+### ⚙️ StatefulSet — For Stateful Apps
+
+**StatefulSet** is similar to Deployment but provides:
+
+* **Stable network identity** (each Pod gets a predictable name)
+* **Persistent volume** for data storage
+* **Ordered deployment & scaling**
+
+---
+
+### 🔹 Example: StatefulSet for MongoDB
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  serviceName: "mongo"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-storage
+          mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: standard
+      resources:
+        requests:
+          storage: 2Gi
+```
+
+---
+
+### 🔹 Headless Service for StatefulSet
+
+You need a **Headless Service** to manage Pod DNS names.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  clusterIP: None
+  selector:
+    app: mongo
+  ports:
+  - port: 27017
+    targetPort: 27017
+```
+
+This gives each Pod a **unique DNS name** like:
+
+```
+mongo-0.mongo.default.svc.cluster.local
+mongo-1.mongo.default.svc.cluster.local
+mongo-2.mongo.default.svc.cluster.local
+```
+
+---
+
+## 🧱 Key Differences Between Deployment and StatefulSet
+
+| Feature             | Deployment (Stateless) | StatefulSet (Stateful)          |
+| ------------------- | ---------------------- | ------------------------------- |
+| **Pod Identity**    | Random                 | Stable (e.g., `app-0`, `app-1`) |
+| **Storage**         | Shared or ephemeral    | Persistent per Pod              |
+| **Scaling**         | Parallel               | Ordered                         |
+| **Pod Replacement** | Random new Pod         | Same identity recreated         |
+| **Use Case**        | Web servers, APIs      | Databases, Kafka, Redis         |
+| **Networking**      | Same Service IP        | Unique DNS name for each Pod    |
+
+---
+
+## ⚡ Summary
+
+| Concept         | Description                                       |
+| --------------- | ------------------------------------------------- |
+| **Stateless**   | No data dependency; can freely scale and restart. |
+| **Stateful**    | Needs data persistence and identity.              |
+| **Deployment**  | Best for stateless apps.                          |
+| **StatefulSet** | Best for stateful apps like databases.            |
+
+---
+
+## 🧩 Real-World Analogy
+
+* **Deployment (Stateless)** → Like fast-food counters. Any worker can serve you; it doesn’t matter who.
+* **StatefulSet (Stateful)** → Like a bank. Each branch (Pod) has its own account records and identity.
+
+---
+

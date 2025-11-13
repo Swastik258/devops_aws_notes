@@ -1,0 +1,280 @@
+---
+
+title: Kubernetes Deployment Explained
+description: Detailed explanation of Kubernetes Deployment, its YAML structure, replicas, and ReplicaSets — with easy-to-understand examples.
+
+---
+
+# 🚀 Kubernetes Deployment — Complete Explanation
+
+---
+
+## 🧠 What Is a Deployment?
+
+A **Deployment** in Kubernetes is a **controller** that manages **Pods** and their **ReplicaSets**.
+
+It ensures your **application runs reliably**, even if pods fail or nodes crash.
+The Deployment automatically:
+
+* Creates Pods
+* Maintains the desired number of Pods
+* Updates Pods without downtime
+* Rolls back changes if something goes wrong
+
+In short:
+👉 **Deployment = Automation + Scaling + Self-Healing for Pods**
+
+---
+
+## 🧩 Key Terms Before the YAML
+
+### 🔹 **Pod**
+
+Smallest deployable unit — runs one or more containers.
+
+### 🔹 **Replica**
+
+The number of **Pod copies** you want running.
+If you set `replicas: 3`, Kubernetes ensures **3 pods** are always active.
+
+### 🔹 **ReplicaSet**
+
+A **ReplicaSet** keeps a stable set of running Pods.
+If one Pod fails, ReplicaSet creates a new one automatically.
+
+> Note: You rarely create ReplicaSets directly — Deployments manage them for you.
+
+### 🔹 **Deployment**
+
+Controls ReplicaSets and Pods, allowing rolling updates, scaling, and rollback.
+
+---
+
+## 🧱 Example: Nginx Deployment YAML
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: dev
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+```
+
+---
+
+## 🧾 Step-by-Step Breakdown
+
+### 1. **apiVersion**
+
+```yaml
+apiVersion: apps/v1
+```
+
+Defines which Kubernetes API version is used.
+For Deployments → always use **`apps/v1`**.
+
+---
+
+### 2. **kind**
+
+```yaml
+kind: Deployment
+```
+
+Tells Kubernetes what resource you’re defining — here, it’s a **Deployment**.
+
+---
+
+### 3. **metadata**
+
+```yaml
+metadata:
+  name: nginx-deployment
+  namespace: dev
+  labels:
+    app: nginx
+```
+
+* **name**: Unique name of the Deployment.
+* **namespace**: The logical group (like `dev`, `test`, or `prod`).
+* **labels**: Used to identify and connect resources like Services and Pods.
+
+---
+
+### 4. **spec**
+
+Defines **how** the Deployment should behave.
+
+#### (a) Number of Replicas
+
+```yaml
+replicas: 3
+```
+
+Means **3 identical Pods** will run simultaneously.
+
+If one crashes, another is recreated automatically.
+
+You can scale easily:
+
+```bash
+kubectl scale deployment nginx-deployment --replicas=5 -n dev
+```
+
+---
+
+#### (b) Selector
+
+```yaml
+selector:
+  matchLabels:
+    app: nginx
+```
+
+Tells the Deployment **which Pods to manage**.
+
+It matches labels inside the Pod template:
+
+```yaml
+labels:
+  app: nginx
+```
+
+If labels don’t match → Deployment won’t manage those Pods.
+
+---
+
+#### (c) Template
+
+This defines how each Pod should look.
+
+```yaml
+template:
+  metadata:
+    labels:
+      app: nginx
+  spec:
+    containers:
+    - name: nginx-container
+      image: nginx:latest
+      ports:
+      - containerPort: 80
+```
+
+* **metadata.labels** — must match the selector above
+* **containers** — list of containers that run in each Pod
+* **image** — container image to use (from Docker Hub, private registry, etc.)
+* **ports** — exposes port 80 from container (useful for web servers)
+
+---
+
+## 🧩 How Deployment Works Internally
+
+1. You apply the Deployment YAML:
+
+   ```bash
+   kubectl apply -f nginx-deployment.yaml
+   ```
+2. Kubernetes creates a **ReplicaSet** automatically.
+3. ReplicaSet creates and monitors **Pods**.
+4. If a Pod fails, ReplicaSet spawns a new one.
+5. If you change the image version, Kubernetes does a **Rolling Update**:
+
+   * Creates new Pods with the new image
+   * Deletes old ones gradually (no downtime)
+
+---
+
+## 🌀 Deployment Lifecycle
+
+1. **Create Deployment**
+
+   ```bash
+   kubectl apply -f nginx-deployment.yaml
+   ```
+
+2. **Check Status**
+
+   ```bash
+   kubectl get deployments -n dev
+   kubectl get pods -n dev
+   ```
+
+3. **Update Deployment (Rolling Update)**
+
+   ```bash
+   kubectl set image deployment/nginx-deployment nginx-container=nginx:1.25 -n dev
+   ```
+
+4. **Rollback (if something breaks)**
+
+   ```bash
+   kubectl rollout undo deployment/nginx-deployment -n dev
+   ```
+
+5. **View Rollout History**
+
+   ```bash
+   kubectl rollout history deployment/nginx-deployment -n dev
+   ```
+
+---
+
+## ⚙️ Check Associated ReplicaSet
+
+Each Deployment automatically creates a **ReplicaSet** to manage Pods.
+
+```bash
+kubectl get rs -n dev
+```
+
+✅ Output:
+
+```
+NAME                         DESIRED   CURRENT   READY   AGE
+nginx-deployment-6c5c9d9b6f   3         3         3       5m
+```
+
+If you change your Deployment (like image version), a **new ReplicaSet** will be created for the new version, while the old one scales down.
+
+---
+
+## 🚀 Key Commands Summary
+
+| Purpose           | Command                                                                    |
+| ----------------- | -------------------------------------------------------------------------- |
+| Create Deployment | `kubectl apply -f deployment.yaml`                                         |
+| Get Deployments   | `kubectl get deployments`                                                  |
+| Scale Pods        | `kubectl scale deployment nginx-deployment --replicas=5`                   |
+| Update Image      | `kubectl set image deployment/nginx-deployment nginx-container=nginx:1.25` |
+| Rollback          | `kubectl rollout undo deployment/nginx-deployment`                         |
+| Get ReplicaSets   | `kubectl get rs`                                                           |
+
+---
+
+## 🧠 In Short
+
+* **Deployment** → Manages ReplicaSets & Pods
+* **ReplicaSet** → Ensures desired number of Pods are running
+* **Pods** → Run the actual containers
+* **Replicas** → Number of identical Pods
+
+---
+

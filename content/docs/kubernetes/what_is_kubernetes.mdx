@@ -1,0 +1,123 @@
+---
+
+title: Introduction to Kubernetes
+description: Simple notes explaining what Kubernetes is, why it was created, and why we need it in modern software development.
+---
+
+---
+
+# ☸️ Introduction to Kubernetes
+
+---
+
+## 🧠 What is Kubernetes?
+
+**Kubernetes (often called K8s)** is an **open-source container orchestration platform** developed by **Google** and now maintained by the **Cloud Native Computing Foundation (CNCF)**.
+
+It is used to **automate the deployment, scaling, and management of containerized applications** — mainly Docker containers.
+
+In simple words, Kubernetes helps you **run and manage many containers across multiple servers easily and reliably.**
+
+---
+
+## ⚙️ Why Kubernetes Was Created
+
+Before Kubernetes, developers used tools like **Docker** to create and run containers — but only on **one machine**.
+
+As applications grew, managing containers manually became difficult:
+
+- What if the server crashes?
+- How do we scale containers automatically?
+- How do we load balance traffic?
+- How do we deploy updates without downtime?
+
+Google faced these challenges while running massive systems like Gmail and YouTube.
+To solve them, they built an internal system called **Borg**, which later inspired **Kubernetes**, released publicly in **2014**.
+
+---
+
+## 🚀 Why We Need Kubernetes
+
+Kubernetes solves the problems of **container management** at scale.
+It helps teams **automate** almost everything — from deployment to recovery.
+
+### 🔹 Problems Without Kubernetes
+
+- Manual container start/stop
+- Difficult to manage multiple servers
+- No auto-scaling or self-healing
+- Hard to update apps without downtime
+- Complex networking between containers
+
+### 🔹 Kubernetes Solutions
+
+✅ **Automation:** Automatically runs containers across servers
+✅ **Self-healing:** Restarts crashed containers automatically
+✅ **Scaling:** Increases or decreases pods based on load
+✅ **Load Balancing:** Distributes traffic evenly
+✅ **Rolling Updates:** Updates apps without downtime
+✅ **Resource Management:** Efficiently uses CPU and memory
+✅ **Portability:** Runs on any cloud or on-premises system
+
+---
+
+## 🧩 How Kubernetes Works (Basic Concept)
+
+Kubernetes works on a **cluster** model — a group of machines working together.
+
+### 🔹 Cluster Components
+
+1. **Master Node (Control Plane)** – manages and monitors everything
+   - Scheduler, API Server, Controller Manager, ETCD (database)
+
+2. **Worker Nodes** – where containers actually run
+   - Each worker runs Pods (groups of containers)
+
+### 🔹 Pod
+
+The smallest deployable unit in Kubernetes — usually runs **one or more containers** together.
+
+Example: A web app container + a logging sidecar container.
+
+---
+
+## ☁️ Kubernetes and Cloud-Native Development
+
+Kubernetes is now the **foundation of modern DevOps and cloud infrastructure**.
+It integrates with:
+
+- **CI/CD pipelines** (Jenkins, GitHub Actions, Azure DevOps)
+- **Monitoring tools** (Prometheus, Grafana)
+- **Service meshes** (Istio, Linkerd)
+- **Cloud providers** (AWS EKS, Azure AKS, Google GKE)
+
+It supports **microservices architecture**, making applications modular, scalable, and easier to manage.
+
+---
+
+## 🧱 Example: Without vs With Kubernetes
+
+**Without Kubernetes:**
+
+- You manually start Docker containers
+- You must monitor, restart, and scale them manually
+- Deployment and updates can break apps
+
+**With Kubernetes:**
+
+- You define everything in YAML (declarative config)
+- Kubernetes automatically deploys, monitors, scales, and restarts containers
+
+---
+
+## 🕰️ History Timeline
+
+| Year      | Event                                                 |
+| --------- | ----------------------------------------------------- |
+| 2003–2013 | Google builds internal system “Borg”                  |
+| 2014      | Kubernetes open-sourced by Google                     |
+| 2015      | Donated to CNCF                                       |
+| 2016+     | Supported by AWS, Azure, GCP                          |
+| 2020+     | Becomes industry standard for container orchestration |
+
+---

@@ -1,0 +1,233 @@
+---
+
+title: Kubernetes Services Explained
+description: Simple explanation of Kubernetes Services, their types, and how they connect pods and expose applications.
+
+---
+
+# 🌐 Kubernetes Services — Complete Explanation
+
+---
+
+## 🧠 What Is a Service in Kubernetes?
+
+In Kubernetes, a **Service** is an **abstraction** that defines a **stable network endpoint** to access one or more **Pods**.
+
+Since Pods are **temporary** (they can restart, die, or be replaced), their IPs keep changing — a **Service** ensures you always have a **fixed IP or DNS name** to connect to your application.
+
+Think of it as a **bridge between your users (or other apps) and the Pods**.
+
+---
+
+## ⚙️ Why We Need Services
+
+* Pods are **ephemeral** (temporary).
+* Each Pod has its own **IP address**, which changes when a Pod restarts.
+* A **Service** provides a **permanent endpoint** (Cluster IP or URL) to access Pods reliably.
+* It also supports **load balancing** between multiple Pod replicas.
+
+---
+
+## 🧩 How a Service Works
+
+1. The Service uses a **selector** to find Pods with specific labels.
+2. Kubernetes automatically routes traffic to those Pods using **kube-proxy**.
+3. Requests are load-balanced between all healthy Pods.
+
+---
+
+## 🚀 Example of a Simple Service
+
+Let’s expose an Nginx Deployment using a Service:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: dev
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+```
+
+* **selector:** Matches Pods with label `app: nginx`
+* **port:** The port users connect to (service port)
+* **targetPort:** The container’s port inside the Pod
+* **type:** Defines how the Service is exposed
+
+Apply it:
+
+```bash
+kubectl apply -f nginx-service.yaml
+```
+
+Check service:
+
+```bash
+kubectl get svc -n dev
+```
+
+---
+
+## 🧱 Types of Kubernetes Services
+
+Kubernetes offers **4 main types** of Services depending on how you want to expose your app.
+
+---
+
+### 1. **ClusterIP (Default)**
+
+* Default type if you don’t specify one.
+* Exposes the Service **inside the cluster only**.
+* Used for **internal communication** between Pods (like backend → database).
+
+```yaml
+type: ClusterIP
+```
+
+✅ Example:
+
+* A backend service connecting to a database in the same cluster.
+
+Access using:
+
+```bash
+kubectl exec -it <pod-name> -n dev -- curl http://nginx-service:80
+```
+
+---
+
+### 2. **NodePort**
+
+* Exposes the Service on a **static port** on **each Node’s IP address**.
+* Lets you access your app **from outside** using:
+
+  ```
+  <NodeIP>:<NodePort>
+  ```
+* Port range: **30000–32767**
+
+```yaml
+type: NodePort
+```
+
+✅ Example:
+
+```bash
+kubectl get svc -n dev
+```
+
+Output:
+
+```
+nginx-service   NodePort   10.96.12.34   <none>   80:30080/TCP   2m
+```
+
+Access app via browser:
+
+```
+http://<node-ip>:30080
+```
+
+---
+
+### 3. **LoadBalancer**
+
+* Used when running on **cloud platforms** (like AWS, Azure, or GCP).
+* Creates an **external load balancer** that routes traffic to your Service.
+* Provides a **public IP**.
+
+```yaml
+type: LoadBalancer
+```
+
+✅ Example:
+
+```bash
+kubectl get svc -n dev
+```
+
+Output:
+
+```
+nginx-service   LoadBalancer   10.96.12.34   34.122.56.120   80:30080/TCP   2m
+```
+
+Access app via:
+
+```
+http://34.122.56.120
+```
+
+---
+
+### 4. **ExternalName**
+
+* Maps a Service to an **external DNS name** (like a third-party API or database).
+* Doesn’t use selectors or create endpoints.
+* Works as a simple **DNS alias**.
+
+```yaml
+type: ExternalName
+externalName: mydatabase.example.com
+```
+
+✅ Example:
+Pods can connect to it like:
+
+```
+mysql-service.dev.svc.cluster.local → mydatabase.example.com
+```
+
+---
+
+## ⚡ Service Discovery
+
+Kubernetes automatically creates a **DNS record** for every Service.
+
+Example:
+A Service named `nginx-service` in the `dev` namespace gets a DNS name:
+
+```
+nginx-service.dev.svc.cluster.local
+```
+
+Any Pod in the same cluster can use this to reach the Service.
+
+---
+
+## 🔄 Checking and Managing Services
+
+| Command                              | Description       |
+| ------------------------------------ | ----------------- |
+| `kubectl get svc`                    | List all services |
+| `kubectl describe svc nginx-service` | Show details      |
+| `kubectl delete svc nginx-service`   | Delete service    |
+
+---
+
+## 🧠 Summary
+
+| Type             | Visibility       | Use Case                                |
+| ---------------- | ---------------- | --------------------------------------- |
+| **ClusterIP**    | Internal         | Service-to-service communication        |
+| **NodePort**     | External         | Access via `<NodeIP>:<Port>`            |
+| **LoadBalancer** | External (Cloud) | Public access via LoadBalancer IP       |
+| **ExternalName** | External (DNS)   | Map internal service to external domain |
+
+---
+
+✅ **In Short:**
+
+* A **Service** provides stable networking for Pods.
+* It ensures **load balancing** and **reliable connectivity**.
+* You can choose **ClusterIP**, **NodePort**, or **LoadBalancer** depending on your environment.
+
+---
+

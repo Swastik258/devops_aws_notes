@@ -1,0 +1,199 @@
+---
+
+title: Kubernetes Core Components — Namespace, Pod, Deployment, and Service
+description: Simple explanation of key Kubernetes components — Namespace, Pod, Deployment, and Service with examples.
+---
+
+---
+
+# ☸️ Kubernetes Core Concepts — Explained Simply
+
+---
+
+## 🧩 1. **Namespace**
+
+A **Namespace** is a way to **divide and organize resources** within a Kubernetes cluster.
+
+Think of it as a **virtual cluster inside a cluster** — helping isolate environments like `dev`, `test`, and `prod`.
+
+### 🧠 Why Use Namespaces?
+
+- Avoid resource name conflicts
+- Apply separate access controls (RBAC)
+- Manage resources independently
+
+### 🧰 Example — Create a Namespace
+
+```bash
+kubectl create namespace dev
+```
+
+### 🧩 Verify Namespaces
+
+```bash
+kubectl get namespaces
+```
+
+✅ Output:
+
+```
+NAME              STATUS   AGE
+default           Active   5d
+kube-system       Active   5d
+dev               Active   1m
+```
+
+---
+
+## 🧱 2. **Pod**
+
+A **Pod** is the **smallest deployable unit** in Kubernetes.
+It represents **one or more containers** that share the same network and storage.
+
+Think of a pod as a **wrapper around your container(s)**.
+
+### 🧠 Example
+
+A pod can contain:
+
+- A **web server** container
+- A **log collector** container (sidecar pattern)
+
+### 🧰 Example — Create a Pod YAML
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  namespace: dev
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+```
+
+Deploy it:
+
+```bash
+kubectl apply -f nginx-pod.yaml
+```
+
+Check:
+
+```bash
+kubectl get pods -n dev
+```
+
+---
+
+## 🚀 3. **Deployment**
+
+A **Deployment** is a **controller** that manages **replicas of Pods**.
+
+It ensures:
+
+- Desired number of Pods are always running
+- Self-healing (restarts failed Pods)
+- Easy updates and rollbacks
+
+### 🧰 Example — Deployment YAML
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+```
+
+Deploy it:
+
+```bash
+kubectl apply -f nginx-deployment.yaml
+```
+
+Check:
+
+```bash
+kubectl get deployments -n dev
+kubectl get pods -n dev
+```
+
+---
+
+## 🌐 4. **Service**
+
+A **Service** in Kubernetes is used to **expose Pods to the network**.
+
+Pods are temporary (they can restart, change IPs),
+so Services provide a **stable IP and DNS name** to access them.
+
+### 🧠 Service Types
+
+| Type             | Description                                     |
+| ---------------- | ----------------------------------------------- |
+| **ClusterIP**    | Internal communication (default)                |
+| **NodePort**     | Exposes service on a specific port on each Node |
+| **LoadBalancer** | External traffic access (used in cloud)         |
+
+---
+
+### 🧰 Example — Service YAML
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: dev
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+```
+
+Deploy it:
+
+```bash
+kubectl apply -f nginx-service.yaml
+```
+
+Check service:
+
+```bash
+kubectl get svc -n dev
+```
+
+✅ Output:
+
+```
+NAME             TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+nginx-service    NodePort    10.96.12.34    <none>        80:30080/TCP   1m
+```
+
+You can now access your app via `http://<node-ip>:30080`
+
+---
+

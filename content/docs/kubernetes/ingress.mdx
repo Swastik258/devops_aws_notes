@@ -1,0 +1,299 @@
+---
+
+title: Kubernetes Ingress Explained
+description: A simple and complete explanation of Kubernetes Ingress, how it works, why we use it, and how to configure it with examples.
+
+---
+
+# 🌍 Kubernetes Ingress — Complete Explanation
+
+---
+
+## 🧠 What Is Ingress?
+
+In Kubernetes, a **Service** can expose Pods internally or externally, but when you want to manage **HTTP or HTTPS traffic**, use **custom domains**, and route requests to **multiple services**, that’s where **Ingress** comes in.
+
+👉 **Ingress = Smart HTTP/HTTPS router for Kubernetes services**
+
+It allows you to:
+
+* Expose multiple services under **one IP**
+* Use **domain names** like `api.example.com` or `app.example.com`
+* Manage **SSL/TLS certificates** for HTTPS
+* Apply **path-based** or **host-based** routing rules
+
+---
+
+## ⚙️ Why We Need Ingress
+
+Without Ingress:
+
+* Each Service (NodePort or LoadBalancer) needs a **separate IP/port**
+* Scaling multiple services becomes messy
+
+With Ingress:
+
+* You can use **one LoadBalancer** and route to multiple services based on **path or hostname**.
+
+Example:
+
+```
+https://myapp.com/api → routes to backend-service
+https://myapp.com/web → routes to frontend-service
+```
+
+---
+
+## 🧩 How Ingress Works
+
+### Components Involved:
+
+1. **Ingress Resource (YAML)**
+
+   * Defines routing rules (who gets which traffic).
+2. **Ingress Controller**
+
+   * The actual implementation that processes those rules (like NGINX, Traefik, etc.).
+3. **Service & Pods**
+
+   * The backend endpoints that receive traffic.
+
+---
+
+## ⚙️ Step 1: Install an Ingress Controller
+
+Kubernetes does not have a built-in controller — you must install one.
+
+The most common is **NGINX Ingress Controller**.
+
+### Example (for KIND or Minikube):
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+```
+
+Check if it’s running:
+
+```bash
+kubectl get pods -n ingress-nginx
+```
+
+You should see something like:
+
+```
+ingress-nginx-controller-xxxxxx   Running
+```
+
+---
+
+## 🧱 Step 2: Create Example Deployments & Services
+
+Let’s create two sample applications.
+
+### 🔹 Frontend (nginx)
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: nginx
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
+```
+
+### 🔹 Backend (http-echo)
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: ealen/echo-server
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
+```
+
+Apply both:
+
+```bash
+kubectl apply -f frontend-backend.yaml
+```
+
+---
+
+## 🧭 Step 3: Create an Ingress Resource
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: myapp.local
+    http:
+      paths:
+      - path: /web
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 80
+```
+
+Apply it:
+
+```bash
+kubectl apply -f ingress.yaml
+```
+
+Check:
+
+```bash
+kubectl get ingress
+```
+
+Output:
+
+```
+NAME          CLASS    HOSTS         ADDRESS     PORTS   AGE
+my-ingress    <none>   myapp.local   127.0.0.1   80      2m
+```
+
+---
+
+## 🌐 Step 4: Test Ingress Locally
+
+Edit your local **hosts** file to map the hostname:
+
+### On Linux/Mac:
+
+```bash
+sudo nano /etc/hosts
+```
+
+Add this line:
+
+```
+127.0.0.1   myapp.local
+```
+
+Now, open in browser:
+
+* [http://myapp.local/web](http://myapp.local/web) → routes to frontend
+* [http://myapp.local/api](http://myapp.local/api) → routes to backend
+
+---
+
+## 🔒 Step 5: Enable HTTPS (Optional)
+
+You can add a **TLS section** in the Ingress file:
+
+```yaml
+spec:
+  tls:
+  - hosts:
+    - myapp.local
+    secretName: myapp-tls
+```
+
+Then create a TLS secret:
+
+```bash
+kubectl create secret tls myapp-tls --key key.pem --cert cert.pem
+```
+
+This enables secure HTTPS access.
+
+---
+
+## 📘 Summary of Key Ingress Concepts
+
+| Concept                | Description                                            |
+| ---------------------- | ------------------------------------------------------ |
+| **Ingress Resource**   | Defines routing rules for incoming HTTP/HTTPS requests |
+| **Ingress Controller** | Executes those rules (e.g., NGINX, Traefik)            |
+| **Host-based Routing** | Routes traffic based on domain (e.g., api.myapp.com)   |
+| **Path-based Routing** | Routes traffic based on URL path (e.g., /api, /web)    |
+| **TLS**                | Enables HTTPS using certificates                       |
+
+---
+
+## ⚡ Common Commands
+
+| Command                               | Description                |
+| ------------------------------------- | -------------------------- |
+| `kubectl get ingress`                 | List all Ingresses         |
+| `kubectl describe ingress my-ingress` | View detailed routing info |
+| `kubectl delete ingress my-ingress`   | Delete Ingress resource    |
+
+---
+
+## 🧠 In Short
+
+* **Ingress** exposes HTTP/HTTPS routes to services.
+* **Ingress Controller** implements those routing rules.
+* You can host **multiple apps** under **one LoadBalancer IP**.
+* Perfect for **microservices** and **domain-based routing**.
+
+---
+

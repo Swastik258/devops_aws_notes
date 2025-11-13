@@ -1,0 +1,124 @@
+---
+title: Kubernetes Architecture Explained
+description: A simple and clear explanation of Kubernetes architecture with labeled components and image diagram.
+---
+
+# ☸️ Kubernetes Architecture — Simple Notes
+
+---
+
+## 🧠 What is Kubernetes Architecture?
+
+Kubernetes follows a **master–worker (control–data plane)** architecture.
+It’s designed to manage and automate the deployment of containerized applications across clusters of machines.
+
+The architecture ensures:
+
+- **High availability**
+- **Scalability**
+- **Self-healing**
+- **Declarative configuration management**
+
+---
+
+## 🏗️ Kubernetes Architecture Overview
+
+Here’s a simple visual idea of how the architecture looks 👇
+
+<img 
+  src="https://k21academy.com/wp-content/uploads/2021/04/Kubernetes-Architecture.png" 
+  alt="Kubernetes Architecture Diagram"
+  width="800"
+  style={{ borderRadius: "8px", margin: "20px 0" }}
+/>
+
+---
+
+## 🧩 Main Components
+
+Kubernetes has two major parts:
+
+### 1. **Control Plane (Master Node)**
+
+The **brain** of Kubernetes — responsible for managing the cluster, making global decisions, and detecting/responding to events.
+
+#### Components:
+
+- **API Server (`kube-apiserver`)**  
+  Acts as the **entry point** to the cluster. All commands (kubectl, dashboard, etc.) go through this.
+
+- **ETCD**  
+  A **key-value store** used as the cluster’s database. It stores all configurations, states, and metadata.
+
+- **Controller Manager (`kube-controller-manager`)**  
+  Watches the cluster state and ensures the desired state matches the current state (e.g., if a pod dies, it recreates it).
+
+- **Scheduler (`kube-scheduler`)**  
+  Decides **which node** a pod should run on based on CPU, memory, and policies.
+
+---
+
+### 2. **Worker Nodes**
+
+These are the **machines (VMs or servers)** where your actual applications (containers) run.
+
+Each node has:
+
+- **Kubelet**  
+  Agent that runs on every node; it communicates with the master and ensures containers are running as expected.
+
+- **Kube-proxy**  
+  Manages **network rules and load balancing** to route traffic between pods and services.
+
+- **Container Runtime**  
+  The software responsible for running containers (e.g., **Docker**, **containerd**, **CRI-O**).
+
+---
+
+### 3. **Pods**
+
+A **Pod** is the smallest deployable unit in Kubernetes — it can contain one or more containers that share storage, networking, and lifecycle.
+
+Example:  
+A web container + a log collector container inside the same pod.
+
+---
+
+### 4. **Services**
+
+A **Service** exposes Pods to the network and provides a **stable IP or DNS** name even if pods restart or change.
+It helps in **load balancing** and **communication** between pods.
+
+---
+
+### 5. **Cluster**
+
+A **Kubernetes cluster** is a group of worker nodes controlled by at least one master node.
+It can run on:
+
+- On-premises servers  
+- Public clouds (AWS, Azure, GCP)  
+- Local systems (via Minikube or Kind)
+
+---
+
+## ⚙️ How It Works (Flow)
+
+1. You write a configuration file (`deployment.yaml`)  
+2. You apply it using `kubectl apply -f deployment.yaml`  
+3. The API Server receives it and stores details in ETCD  
+4. Scheduler assigns Pods to worker nodes  
+5. Kubelet runs the containers  
+6. Services handle communication and expose endpoints  
+
+---
+
+## 🚀 Key Features of Kubernetes Architecture
+
+- **Modular and Scalable**  
+- **Fault-Tolerant & Self-Healing**  
+- **Automated Deployments and Rollbacks**  
+- **Declarative Configuration (YAML-based)**  
+- **Portable across environments**
+
+---
