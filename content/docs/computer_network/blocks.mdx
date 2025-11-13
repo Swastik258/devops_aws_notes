@@ -1,0 +1,119 @@
+---
+title: "CIDR, Subnetting, Internet Gateway, and More"
+description: "Detailed notes on CIDR, Subnetting, Internet Gateway, NAT, and DHCP in computer networks."
+---
+
+# 🌐 Computer Network Notes: CIDR, Subnetting, Internet Gateway, and More
+
+## 🧮 CIDR (Classless Inter-Domain Routing)
+**Definition:** CIDR is a method for allocating IP addresses and routing that replaces the older classful addressing system. It allows more efficient use of IP address space.  
+**Key Points:**  
+- Introduced in **1993** to replace **Class A, B, and C** networks.  
+- Uses the format: `IP_address/prefix_length` (e.g., `192.168.1.0/24`).  
+- The prefix length indicates the number of bits used for the **network portion** of the address.  
+- Example:  
+  - `192.168.1.0/24` → 255.255.255.0 (256 addresses)  
+  - `10.0.0.0/16` → 255.255.0.0 (65,536 addresses)  
+**Advantages:**  
+- Efficient IP address utilization.  
+- Reduces the size of routing tables.  
+- Supports **route aggregation** (supernetting).  
+**Disadvantages:**  
+- Slightly more complex to calculate and manage compared to classful addressing.
+
+---
+
+## 🧩 Subnetting
+**Definition:** Subnetting divides a single IP network into smaller logical sub-networks (subnets).  
+**Purpose:**  
+- Improves **network management**, **security**, and **performance**.  
+- Efficient use of available IP addresses.  
+**Key Concepts:**  
+- A subnet mask identifies the **network** and **host** portions of an IP address.  
+- Example:  
+  - IP: `192.168.1.100`  
+  - Subnet Mask: `255.255.255.0` → `/24`  
+  - Network Address: `192.168.1.0`  
+  - Broadcast Address: `192.168.1.255`  
+**Formula:**  
+- Subnets = 2ⁿ (n = borrowed bits)  
+- Hosts per subnet = 2ʰ − 2 (h = host bits)  
+**Advantages:**  
+- Reduces network congestion.  
+- Better control and security per subnet.  
+**Disadvantages:**  
+- Complex configuration for large networks.
+
+---
+
+## 🌉 Internet Gateway
+**Definition:** An Internet Gateway connects a private network (LAN) to the Internet, acting as a bridge between the two.  
+**Key Functions:**  
+- Provides a **path** for traffic to reach the Internet.  
+- Performs **Network Address Translation (NAT)**.  
+- Enforces **firewall** and **security** rules.  
+**Types:**  
+1. **Default Internet Gateway (AWS/Cloud)** – Routes traffic from private subnets to the Internet.  
+2. **Hardware/Software Gateways** – Routers or firewalls in enterprise setups.  
+**Advantages:**  
+- Enables Internet connectivity.  
+- Adds control and security.  
+**Disadvantages:**  
+- Can become a bottleneck if overloaded.
+
+---
+
+## 🔁 NAT (Network Address Translation)
+**Definition:** NAT translates private IP addresses into public IPs before sending packets to the Internet.  
+**Purpose:**  
+- Conserves public IP addresses.  
+- Adds a **security layer** by hiding internal IPs.  
+**Types:**  
+1. **Static NAT** – One-to-one mapping.  
+2. **Dynamic NAT** – Uses a pool of public IPs.  
+3. **PAT (Port Address Translation)** – Many private IPs share one public IP via ports.  
+**Advantages:**  
+- Saves IPs.  
+- Adds obscurity for internal hosts.  
+**Disadvantages:**  
+- Can break certain apps (e.g., VoIP).  
+- Adds processing overhead.
+
+---
+
+## ⚙️ DHCP (Dynamic Host Configuration Protocol)
+**Definition:** DHCP automatically assigns IP addresses and other configuration details (DNS, gateway) to devices.  
+**Key Functions:**  
+- Automates IP configuration.  
+- Uses **UDP ports 67 (server)** and **68 (client)**.  
+**DHCP Process (DORA):**  
+1. **Discover** – Client broadcasts for IP.  
+2. **Offer** – Server offers IP.  
+3. **Request** – Client requests the offered IP.  
+4. **Acknowledge** – Server confirms.  
+**Advantages:**  
+- Simplifies IP management.  
+- Avoids conflicts.  
+**Disadvantages:**  
+- If server fails, new devices can’t get IPs.  
+- Not ideal for static devices.
+
+---
+
+## 🧭 Summary Table
+| Concept | Full Form | Function | Key Feature | Advantage | Layer |
+|----------|------------|-----------|--------------|------------|--------|
+| **CIDR** | Classless Inter-Domain Routing | Efficient IP allocation | Variable-length subnet mask | Saves address space | Network |
+| **Subnetting** | — | Divides network into smaller subnets | Improves management | Efficient IP use | Network |
+| **Internet Gateway** | — | Connects LAN to Internet | Performs NAT and routing | Internet access | Network |
+| **NAT** | Network Address Translation | Maps private to public IPs | Hides internal addresses | IP conservation | Network |
+| **DHCP** | Dynamic Host Configuration Protocol | Assigns IPs automatically | DORA process | Simplifies management | Application |
+
+---
+
+**Summary:**  
+- **CIDR** enables flexible IP allocation.  
+- **Subnetting** divides a network for better management.  
+- **Internet Gateways** connect private networks to the Internet.  
+- **NAT** conserves public IPs and secures internal systems.  
+- **DHCP** automates IP assignment and simplifies configuration.

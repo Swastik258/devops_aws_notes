@@ -1,59 +1,46 @@
 ---
-title: Docker Notes
-description: Quick reference guide for Docker commands and concepts.
+title: "Docker Basics - Images, Containers, Networks, Volumes, and Compose"
+description: "Concise notes explaining Docker, Images, Containers, Networks, Volumes, and Docker Compose."
 ---
 
-# 🐳 Docker — Quick Notes
+# 🐳 Docker Basics
 
-Docker is a **platform for building, running, and shipping applications in containers**.  
-Containers are lightweight, portable environments that package your app and its dependencies.
+## 🧱 Docker
+Docker is a platform to **build, run, and manage applications** in isolated **containers**. It ensures apps run the same on any system.  
+**Advantages:** lightweight, portable, consistent environments, easy deployment.
 
----
+## 🖼️ Docker Image
+An **image** is a **read-only blueprint** for creating containers. It includes application code, dependencies, and runtime.  
+**Example:** `docker pull nginx`  
+**Advantage:** reusable and portable.
 
-## ⚙️ Basic Concepts
+## 📦 Docker Container
+A **container** is a **running instance of an image**. It is isolated and lightweight.  
+**Example:** `docker run -d -p 8080:80 nginx`  
+**Advantages:** ephemeral, portable, consistent.
 
-- **Image** → Blueprint of your container (like a snapshot).
-- **Container** → Running instance of an image.
-- **Dockerfile** → Script that defines how to build an image.
-- **Docker Hub** → Public registry to store and share images.
-- **Volume** → Used for persisting data.
-- **Network** → Connects containers.
+## 🌐 Docker Network
+Docker **networks** connect containers to each other or the Internet.  
+**Types:** bridge (default), host, none, overlay.  
+**Example:** `docker network create my_network`  
+**Advantage:** enables secure container communication.
 
----
+## 💾 Docker Volume
+A **volume** is persistent storage for containers. Data survives container removal.  
+**Example:** `docker run -v my_volume:/data nginx`  
+**Advantage:** data persistence and sharing.
 
-## 📦 Common Docker Commands
-
-| Command | Description |
-|----------|--------------|
-| `docker --version` | Check Docker version |
-| `docker ps` | List running containers |
-| `docker ps -a` | List all containers (including stopped) |
-| `docker images` | Show downloaded images |
-| `docker pull <image>` | Download an image from Docker Hub |
-| `docker run <image>` | Run a container |
-| `docker stop <container>` | Stop a running container |
-| `docker rm <container>` | Remove a container |
-| `docker rmi <image>` | Remove an image |
-| `docker exec -it <container> bash` | Open shell inside a container |
-
----
-
-## 🧱 Example: Simple Dockerfile
-
-```dockerfile
-# Use Node.js base image
-FROM node:18-alpine
-
-# Set working directory
-WORKDIR /app
-
-# Copy files
-COPY package*.json ./
-RUN npm install
-
-# Copy source code
-COPY . .
-
-# Expose port and run app
-EXPOSE 3000
-CMD ["npm", "start"]
+## ⚙️ Docker Compose
+**Compose** manages **multi-container apps** with a single YAML file.  
+**Example:**
+```yaml
+version: '3'
+services:
+  web:
+    image: nginx
+    ports:
+      - "8080:80"
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password

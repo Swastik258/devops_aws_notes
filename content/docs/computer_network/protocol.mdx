@@ -1,0 +1,76 @@
+---
+title: "Computer Network Protocols - HTTP, HTTPS, SSH, and SSL"
+description: "Notes on HTTP, HTTPS, SSH, and SSL protocols in computer networks."
+---
+
+# Computer Network Notes: HTTP, HTTPS, SSH, and SSL
+
+## 🌐 HTTP (HyperText Transfer Protocol)
+**Definition:** HTTP is an application layer protocol used for transmitting hypermedia documents (like HTML) between a client (browser) and a server. It is the foundation of data communication on the World Wide Web.  
+**Key Points:**  
+- Operates over **TCP (port 80)**  
+- It is **stateless** — each request is independent  
+- Uses **methods** like `GET`, `POST`, `PUT`, `DELETE`, etc.  
+- Data is **not encrypted**, making it vulnerable to interception  
+- Example: `http://www.example.com`  
+**Advantages:** Simple and fast for transferring data; widely supported across browsers and servers.  
+**Disadvantages:** No encryption → vulnerable to attacks like sniffing and MITM.
+
+---
+
+## 🔒 HTTPS (HyperText Transfer Protocol Secure)
+**Definition:** HTTPS is the secure version of HTTP. It uses **SSL/TLS encryption** to protect data transmitted between client and server.  
+**Key Points:**  
+- Operates over **TCP (port 443)**  
+- Provides **confidentiality**, **integrity**, and **authentication**  
+- Encrypts data before transmission, preventing eavesdropping  
+- Uses **digital certificates** from trusted Certificate Authorities (CAs)  
+- Example: `https://www.example.com`  
+**Advantages:** Secure communication channel; builds user trust; protects sensitive data (passwords, payment info).  
+**Disadvantages:** Slightly higher processing overhead; requires certificate management.
+
+---
+
+## 🧩 SSH (Secure Shell)
+**Definition:** SSH is a cryptographic network protocol used to securely log into remote systems and execute commands over an unsecured network.  
+**Key Points:**  
+- Operates over **TCP (port 22)**  
+- Provides **secure remote access** and **file transfer** (via SCP or SFTP)  
+- Uses **public-key cryptography** for authentication  
+- Replaces insecure protocols like Telnet and rlogin  
+- Command Example: `ssh user@hostname`  
+**Advantages:** Strong encryption; secure command execution and file transfers; supports tunneling and port forwarding.  
+**Disadvantages:** Can be complex to configure; misconfigured keys can cause vulnerabilities.
+
+---
+
+## 🔐 SSL (Secure Sockets Layer) / TLS (Transport Layer Security)
+**Definition:** SSL is a security protocol that provides encrypted communication over a computer network. TLS is its updated, more secure version.  
+**Key Points:**  
+- Works between **transport** and **application layers**  
+- Used by HTTPS, SMTP, IMAP, and others  
+- Ensures **encryption**, **message integrity**, and **authentication**  
+- Uses **X.509 certificates** and **Public Key Infrastructure (PKI)**  
+**SSL/TLS Handshake Steps:**  
+1. **Client Hello** – Client sends supported encryption methods  
+2. **Server Hello** – Server responds with chosen method and certificate  
+3. **Key Exchange** – Client verifies certificate and sends session key  
+4. **Secure Communication** – Both sides encrypt data using the session key  
+**Advantages:** Encrypts data; authenticates parties; prevents eavesdropping and tampering.  
+**Disadvantages:** Computational overhead; certificate renewal required.
+
+---
+
+## 🧭 Summary Table
+| Protocol | Full Form | Port | Encryption | Purpose | Security Level |
+|-----------|------------|------|-------------|----------|----------------|
+| **HTTP** | HyperText Transfer Protocol | 80 | ❌ No | Web data transfer | Low |
+| **HTTPS** | HyperText Transfer Protocol Secure | 443 | ✅ Yes (SSL/TLS) | Secure web transfer | High |
+| **SSH** | Secure Shell | 22 | ✅ Yes | Secure remote access | High |
+| **SSL/TLS** | Secure Sockets Layer / Transport Layer Security | — | ✅ Yes | Encryption for network protocols | High |
+
+**Summary:**  
+- **HTTP** handles web data transfer without encryption.  
+- **HTTPS** secures HTTP using **SSL/TLS**.  
+- **SSH** secures remote login and file transfers.  
+- **SSL/TLS** provides encryption and authentication for network communication.
