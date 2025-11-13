@@ -1,0 +1,261 @@
+---
+---
+
+title: Git and GitHub — Complete Notes (Short Version)
+description: A complete and simplified guide to Git and GitHub with all key commands and concepts in one place.
+
+---
+
+# 🧩 Git and GitHub — Complete Notes
+
+---
+
+## ⚙️ What is Git and GitHub
+
+**Git** → A version control system to track and manage code locally.
+**GitHub** → A cloud platform to host Git repositories, collaborate, and manage code online.
+
+Git = local version control
+GitHub = remote collaboration + storage
+
+---
+
+## 🧠 Basic Setup
+
+```
+sudo apt install git -y
+git config --global user.name "Your Name"
+git config --global user.email "youremail@example.com"
+```
+
+Initialize and commit:
+
+```
+git init
+git add .
+git commit -m "Initial commit"
+```
+
+---
+
+## ☁️ Connect to GitHub
+
+1. Create repo on GitHub.
+2. Connect your local repo:
+
+```
+git remote add origin https://github.com/user/repo.git
+git branch -M main
+git push -u origin main
+```
+
+---
+
+## 🌿 Branches and Merging
+
+**Branch** → a separate line of development
+
+```
+git branch feature
+git checkout feature
+```
+
+**Merge** → combine branch into main
+
+```
+git checkout main
+git merge feature
+```
+
+**Delete branch:**
+
+```
+git branch -d feature
+```
+
+---
+
+## 📨 Pull Request (PR)
+
+When you push a new branch to GitHub, create a **Pull Request** to merge changes into `main`.
+Used for **code review** and **collaboration**.
+
+Steps:
+
+1. Push branch → `git push origin feature`
+2. Go to GitHub → Click “Compare & Pull Request”
+3. Review → Approve → Merge
+
+---
+
+## 🔁 Common Commands
+
+```
+git status        # check file status
+git add .         # stage all files
+git commit -m ""  # save version
+git push          # upload to GitHub
+git pull          # get latest code
+git log           # view commit history
+```
+
+---
+
+## 🧱 Clone and Fork
+
+**Clone:** Copy repo locally
+
+```
+git clone https://github.com/user/repo.git
+```
+
+**Fork:** Make your own copy of another repo on GitHub (for contributing).
+
+---
+
+## 🧩 Important Git Features
+
+**1. .gitignore** → ignore files/folders
+
+```
+node_modules/
+.env
+__pycache__/
+```
+
+**2. Tags** → mark versions
+
+```
+git tag v1.0
+git push origin v1.0
+```
+
+**3. Reset & Revert** → undo changes
+
+```
+git reset --hard HEAD~1
+git revert <commit_id>
+```
+
+**4. Stash** → temporarily save uncommitted changes
+
+```
+git stash
+git stash pop
+```
+
+**5. Cherry-pick** → pick one specific commit
+
+```
+git cherry-pick <commit_id>
+```
+
+**6. Rebase** → move commits on top of another branch
+
+```
+git rebase main
+```
+
+---
+
+## 🔒 SSH Authentication
+
+Generate SSH key:
+
+```
+ssh-keygen -t ed25519 -C "youremail@example.com"
+```
+
+Add key to GitHub → **Settings → SSH and GPG Keys**
+Clone securely using SSH:
+
+```
+git clone git@github.com:user/repo.git
+```
+
+---
+
+## ⚙️ Remote Management
+
+```
+git remote -v               # list remotes
+git remote add origin URL   # add remote
+git remote remove origin    # remove remote
+```
+
+---
+
+## 🧠 Commits and History
+
+```
+git log                    # show history
+git show <commit_id>       # details
+git diff                   # compare changes
+```
+
+Each commit = snapshot of code changes.
+Use clear messages like:
+`git commit -m "Fixed login bug"`
+
+---
+
+## 👥 Collaboration
+
+- Each developer works on their **own branch**.
+- Create **pull requests** to merge safely.
+- Use **issues** for bugs and **projects** for planning.
+- Mention commits in issues:
+  `Fixes #12` → closes issue automatically after merge.
+
+---
+
+## ⚡ GitHub Actions (CI/CD)
+
+Automate testing, builds, and deployment with workflows.
+Create `.github/workflows/main.yml`:
+
+```yaml
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Tests
+        run: npm test
+```
+
+---
+
+## 🌐 GitHub Pages
+
+Host static websites for free.
+Steps:
+
+1. Push site files to GitHub
+2. Go to **Settings → Pages**
+3. Select branch → Save
+4. Live at `https://username.github.io/repo-name`
+
+---
+
+## 📦 Submodules (Advanced)
+
+Add another repo inside your project:
+
+```
+git submodule add https://github.com/user/lib.git libs/lib
+```
+
+---
+
+## 🧹 Undo or Manage Mistakes
+
+```
+git restore filename        # discard changes
+git reset --hard HEAD~1     # remove last commit
+git revert <commit_id>      # safe undo
+```
+
+---
