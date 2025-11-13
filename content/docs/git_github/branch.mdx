@@ -1,0 +1,151 @@
+---
+
+title: Understanding Git Branches, Pull Requests, and Merging
+description: A simple guide explaining Git branches, pull requests, and how merging works in Git and GitHub.
+---
+
+---
+
+# 🌿 Git Branches, Pull Requests, and Merging — Simple Guide
+
+When working with Git and GitHub, **branching**, **pull requests**, and **merging** are core concepts that help developers work together smoothly without breaking the main code.
+
+---
+
+## 🌿 What is a Branch in Git?
+
+A **branch** is like a separate workspace or a copy of your main project where you can make changes **without affecting the main code**.
+
+By default, Git creates a branch called **main** (or **master**).
+You can create multiple branches to work on new features, fix bugs, or test ideas independently.
+
+**Commands:**
+
+```
+git branch              # list all branches
+git branch feature-login  # create a new branch
+git checkout feature-login  # switch to that branch
+```
+
+Now you are inside the `feature-login` branch — you can edit files, add commits, and test without touching the main branch.
+
+Once done, you can merge it back into `main`.
+
+---
+
+## 🔀 Why Use Branches?
+
+- To work on **multiple features** at the same time
+- To **avoid conflicts** while collaborating
+- To **experiment** safely
+- To keep the **main branch stable**
+
+Example:
+You and your teammate both clone the same repo.
+You work on `feature-login` and your teammate on `feature-dashboard`.
+Both can make changes separately and later merge them into `main`.
+
+---
+
+## 📨 What is a Pull Request (PR)?
+
+A **Pull Request (PR)** is a request to merge your branch into another branch — usually the main branch — on **GitHub**.
+
+It’s used in team collaboration to review changes before merging.
+You create a PR after pushing your branch to GitHub.
+
+### 💡 Steps to Create a Pull Request:
+
+1. Push your branch to GitHub:
+
+   ```
+   git push origin feature-login
+   ```
+
+2. Go to your GitHub repository.
+3. You’ll see a **Compare & Pull Request** button.
+4. Click it, add a title and description for your changes.
+5. Submit the pull request.
+
+Now your teammates can **review, comment, or approve** your code before merging.
+
+---
+
+## 🔁 What is Merging?
+
+**Merging** means combining changes from one branch into another.
+Usually, you merge your feature branch into the `main` branch after the pull request is approved.
+
+### Example Commands:
+
+```
+git checkout main
+git merge feature-login
+```
+
+After merging, the code from `feature-login` becomes part of the main project.
+
+You can delete the branch once merged:
+
+```
+git branch -d feature-login
+```
+
+---
+
+## ⚔️ Merge Conflicts
+
+A **merge conflict** happens when two branches change the same part of a file in different ways.
+Git can’t decide which change to keep.
+
+In that case, Git marks the conflict in the file.
+You’ll need to manually edit it, choose which version to keep, and then commit the fix:
+
+```
+git add .
+git commit -m "Resolved merge conflict"
+```
+
+---
+
+## 🧠 What is Rebase (Optional Concept)
+
+**Rebasing** is an alternative to merging.
+It moves your branch commits on top of the latest commits from another branch, keeping a **cleaner history**.
+
+```
+git checkout feature-login
+git rebase main
+```
+
+But in collaborative environments, **merge** is safer and more commonly used.
+
+---
+
+## 🧩 Example Workflow Summary
+
+1. Create a new branch
+
+   ```
+   git checkout -b feature-login
+   ```
+
+2. Make changes and commit
+
+   ```
+   git add .
+   git commit -m "Added login feature"
+   ```
+
+3. Push branch to GitHub
+
+   ```
+   git push origin feature-login
+   ```
+
+4. Create a Pull Request on GitHub
+5. Review and approve the PR
+6. Merge it into the `main` branch
+7. Delete the feature branch
+
+---

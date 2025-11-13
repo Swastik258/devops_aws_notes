@@ -1,0 +1,162 @@
+---
+
+title: Understanding Docker Volumes and Docker Networks
+description: Simple explanation and practical guide on how to create and use Docker Volumes and Networks.
+---
+
+---
+
+# 🐳 Docker Volumes and Docker Networks
+
+This guide explains two important concepts in Docker — **Volumes** (for data storage) and **Networks** (for container communication).
+Both are essential for managing real-world applications where containers need to store data and talk to each other.
+
+---
+
+## 💾 What is a Docker Volume
+
+A **Docker Volume** is a storage mechanism used to **persist data** generated or used by containers.
+Normally, data inside a container is deleted when the container is removed, but with volumes, data stays safe even after deletion.
+
+In short:
+
+- Volumes are used to **store and share data** between containers.
+- They are managed by Docker and stored outside the container’s filesystem.
+
+---
+
+### ⚙️ Step 1: Create a Docker Volume
+
+You can create a volume manually using:
+
+```
+docker volume create myvolume
+```
+
+This command creates a volume named `myvolume` that can be used by any container.
+
+---
+
+### 🧩 Step 2: Use Volume in a Container
+
+To attach a volume to a container:
+
+```
+docker run -d \
+  --name mycontainer \
+  -v myvolume:/usr/share/nginx/html \
+  nginx
+```
+
+**Explanation:**
+
+- `-v myvolume:/usr/share/nginx/html` → mounts the `myvolume` to the given path inside the container.
+- Any data written to `/usr/share/nginx/html` inside the container will be stored persistently in `myvolume`.
+
+---
+
+### 🧾 Step 3: Check and Inspect Volumes
+
+To see all volumes:
+
+```
+docker volume ls
+```
+
+To inspect details about a specific volume:
+
+```
+docker volume inspect myvolume
+```
+
+---
+
+### 🧹 Step 4: Remove Volumes
+
+Remove an unused volume:
+
+```
+docker volume rm myvolume
+```
+
+Remove all unused volumes:
+
+```
+docker volume prune
+```
+
+💡 **Tip:** Never use container storage for databases or important files — always use volumes for persistence.
+
+---
+
+## 🌐 What is a Docker Network
+
+A **Docker Network** allows containers to **communicate** with each other securely and efficiently.
+By default, containers are isolated — Docker networks connect them together.
+
+In short:
+
+- Containers on the same network can **talk to each other** using container names.
+- You can create multiple custom networks for different applications.
+
+---
+
+### ⚙️ Step 1: Create a Docker Network
+
+To create a new network:
+
+```
+docker network create mynetwork
+```
+
+This creates a bridge-type network by default, which allows containers to communicate with each other on the same host.
+
+---
+
+### 🧩 Step 2: Run Containers on the Same Network
+
+Run two containers and connect them to the same network:
+
+```
+docker run -d --name app1 --network mynetwork nginx
+docker run -d --name app2 --network mynetwork httpd
+```
+
+**Explanation:**
+
+- Both `app1` and `app2` are now connected to `mynetwork`.
+- They can communicate using container names, e.g., `ping app2` from inside `app1`.
+
+---
+
+### 🧾 Step 3: Inspect Network Details
+
+To see available networks:
+
+```
+docker network ls
+```
+
+To see detailed info about a network:
+
+```
+docker network inspect mynetwork
+```
+
+---
+
+### 🧹 Step 4: Remove a Network
+
+To remove a specific network:
+
+```
+docker network rm mynetwork
+```
+
+Remove all unused networks:
+
+```
+docker network prune
+```
+
+---

@@ -1,0 +1,184 @@
+---
+
+title: Using MySQL and MongoDB in Docker
+description: Step-by-step guide on how to use MySQL and MongoDB with Docker — from pulling images to creating and running containers.
+---
+
+---
+
+# 🐳 Using MySQL and MongoDB in Docker
+
+This guide explains how to use **MySQL** and **MongoDB** databases inside Docker — including pulling official images, creating containers, and running them with proper configurations.
+
+---
+
+## 🧱 What Happens When You Use Databases in Docker
+
+When you use Docker for databases like MySQL or MongoDB:
+
+- You run the **database server inside a container**.
+- Your data is stored inside the container (or on a persistent volume).
+- You can connect to it from your host machine or other containers.
+- It’s easy to start, stop, and manage multiple databases.
+
+---
+
+## 🐬 How to Use MySQL in Docker
+
+### ⚙️ Step 1: Pull the MySQL Image
+
+Use the official MySQL image from Docker Hub:
+
+```
+docker pull mysql:8.0
+```
+
+---
+
+### 🧩 Step 2: Create and Run a MySQL Container
+
+Run MySQL in a container with username, password, and database name:
+
+```
+docker run -d \
+  --name mysql-container \
+  -e MYSQL_ROOT_PASSWORD=root123 \
+  -e MYSQL_DATABASE=mydb \
+  -e MYSQL_USER=myuser \
+  -e MYSQL_PASSWORD=mypass123 \
+  -p 3306:3306 \
+  mysql:8.0
+```
+
+**Explanation:**
+
+- `--name mysql-container` → container name.
+- `-e` → environment variables for root password, user, and database.
+- `-p 3306:3306` → maps container port 3306 (MySQL default) to host.
+- `mysql:8.0` → official MySQL image.
+
+✅ Once it’s running, you can connect:
+
+```
+mysql -h localhost -P 3306 -u root -p
+```
+
+---
+
+### 🧾 Step 3: Persist Data Using a Volume
+
+To keep data safe even after container deletion:
+
+```
+docker run -d \
+  --name mysql-container \
+  -e MYSQL_ROOT_PASSWORD=root123 \
+  -v mysql_data:/var/lib/mysql \
+  -p 3306:3306 \
+  mysql:8.0
+```
+
+This stores MySQL data in a Docker-managed volume named `mysql_data`.
+
+---
+
+### 🧹 Step 4: Manage MySQL Container
+
+Stop container:
+
+```
+docker stop mysql-container
+```
+
+Start container:
+
+```
+docker start mysql-container
+```
+
+Remove container:
+
+```
+docker rm mysql-container
+```
+
+---
+
+## 🍃 How to Use MongoDB in Docker
+
+### ⚙️ Step 1: Pull the MongoDB Image
+
+Get the latest official MongoDB image:
+
+```
+docker pull mongo:latest
+```
+
+---
+
+### 🧩 Step 2: Create and Run a MongoDB Container
+
+Run MongoDB with a root username and password:
+
+```
+docker run -d \
+  --name mongodb-container \
+  -e MONGO_INITDB_ROOT_USERNAME=admin \
+  -e MONGO_INITDB_ROOT_PASSWORD=admin123 \
+  -p 27017:27017 \
+  mongo:latest
+```
+
+**Explanation:**
+
+- `MONGO_INITDB_ROOT_USERNAME` → admin username.
+- `MONGO_INITDB_ROOT_PASSWORD` → admin password.
+- `-p 27017:27017` → maps MongoDB’s default port to your local machine.
+
+✅ Connect using Mongo shell or Compass:
+
+```
+mongo -u admin -p admin123 --authenticationDatabase admin
+```
+
+---
+
+### 🧾 Step 3: Persist MongoDB Data
+
+To keep MongoDB data even if the container is removed:
+
+```
+docker run -d \
+  --name mongodb-container \
+  -e MONGO_INITDB_ROOT_USERNAME=admin \
+  -e MONGO_INITDB_ROOT_PASSWORD=admin123 \
+  -v mongo_data:/data/db \
+  -p 27017:27017 \
+  mongo:latest
+```
+
+This saves MongoDB data in a Docker volume named `mongo_data`.
+
+---
+
+### 🧹 Step 4: Manage MongoDB Container
+
+Stop container:
+
+```
+docker stop mongodb-container
+```
+
+Start container:
+
+```
+docker start mongodb-container
+```
+
+Remove container:
+
+```
+docker rm mongodb-container
+```
+
+---

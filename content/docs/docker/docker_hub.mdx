@@ -1,0 +1,113 @@
+---
+
+title: Understanding Docker Hub and Uploading Images
+description: Simple guide explaining what Docker Hub is and how to upload your own Docker images to it.
+---
+
+---
+
+# 🐳 Docker Hub and Uploading Images
+
+Docker Hub is the **official cloud-based registry** where Docker users can **store, share, and manage images** publicly or privately.
+It allows developers to upload their Docker images and pull them from anywhere in the world.
+
+You can think of it like **GitHub for Docker images** — instead of pushing code, you push container images.
+
+---
+
+## 🌐 What is Docker Hub
+
+- Docker Hub is a **central repository** for Docker images.
+- You can **pull** images to use (like `nginx`, `mysql`, `ubuntu`, etc.) or **push** your own custom images.
+- It helps in **team collaboration**, **version control**, and **easy deployment** of containerized applications.
+
+Examples:
+
+- Public image → anyone can download (like `nginx:latest`)
+- Private image → only you or your organization can access
+
+---
+
+## ⚙️ Step 1: Create a Docker Hub Account
+
+1. Go to [https://hub.docker.com](https://hub.docker.com)
+2. Click **Sign Up** and create a free account.
+3. After registration, log in to Docker Hub.
+
+---
+
+## 🧩 Step 2: Log in to Docker from Terminal
+
+Use your Docker Hub credentials to log in from your local machine:
+
+```
+docker login
+```
+
+It will ask for your **Docker ID** and **password**.
+If login is successful, you’ll see:
+
+```
+Login Succeeded
+```
+
+---
+
+## 🏗️ Step 3: Tag Your Local Docker Image
+
+Before pushing your image to Docker Hub, tag it properly with your Docker Hub username and repository name.
+
+Example:
+
+```
+docker tag myapp:latest your-dockerhub-username/myapp:1.0
+```
+
+**Explanation:**
+
+- `myapp:latest` → your local image name.
+- `your-dockerhub-username/myapp:1.0` → repository name with tag version.
+
+The image must include your **Docker Hub username** before pushing.
+
+---
+
+## ☁️ Step 4: Push Image to Docker Hub
+
+Now upload your image to Docker Hub:
+
+```
+docker push your-dockerhub-username/myapp:1.0
+```
+
+Docker will upload all layers of the image.
+Once completed, you’ll see it available in your Docker Hub account under **Repositories**.
+
+---
+
+## 🔍 Step 5: Verify Image on Docker Hub
+
+1. Log in to [hub.docker.com](https://hub.docker.com)
+2. Go to **Repositories**
+3. You’ll see your uploaded image listed (e.g., `myapp` with tag `1.0`).
+
+Now anyone (or you) can pull it using:
+
+```
+docker pull your-dockerhub-username/myapp:1.0
+```
+
+---
+
+## 🧹 Step 6: Manage Docker Images
+
+You can push new versions of the same image with different tags:
+
+```
+docker tag myapp:latest your-dockerhub-username/myapp:2.0
+docker push your-dockerhub-username/myapp:2.0
+```
+
+You can also delete old images directly from the Docker Hub web interface.
+
+---
