@@ -1,0 +1,110 @@
+---
+
+title: Building Docker Image and Running Container
+description: Step-by-step guide to create a Docker image and run a container from it.
+---
+
+---
+
+# Building a Docker Image and Running a Container
+
+This is a simple guide on how to build a Docker image from your project and run a container from that image.
+
+---
+
+## Step 1: Install Docker
+
+Make sure Docker is installed on your system.
+
+**Commands:**
+
+```
+sudo apt update
+sudo apt install docker.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+docker --version
+```
+
+---
+
+## Step 2: Create a Project Directory
+
+**Commands:**
+
+```
+mkdir myapp
+cd myapp
+```
+
+Create your application files here (like `app.py`, `index.html`, etc.).
+
+---
+
+## Step 3: Create a Dockerfile
+
+Create a file named `Dockerfile` inside your project folder.
+Here’s an example for a Python app:
+
+```
+FROM python:3.9-slim
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+EXPOSE 5000
+CMD ["python", "app.py"]
+```
+
+---
+
+## Step 4: Build the Docker Image
+
+**Command:**
+
+```
+docker build -t myapp:latest .
+```
+
+- `-t myapp:latest` → name and tag for the image
+- `.` → current directory as context
+
+Check if the image is created:
+
+```
+docker images
+```
+
+---
+
+## Step 5: Run a Container from the Image
+
+**Command:**
+
+```
+docker run -d -p 5000:5000 --name mycontainer myapp:latest
+```
+
+- `-d` → run in background
+- `-p 5000:5000` → map port 5000 from container to local
+- `--name mycontainer` → name of the container
+
+Check running containers:
+
+```
+docker ps
+```
+
+---
+
+## Step 6: Manage Containers and Images
+
+**Commands:**
+
+```
+docker stop mycontainer
+docker start mycontainer
+docker rm mycontainer
+docker rmi myapp:latest
+```
+
+---

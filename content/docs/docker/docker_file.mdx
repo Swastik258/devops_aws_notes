@@ -1,0 +1,102 @@
+---
+
+title: Creating Dockerfiles for React.js, Java, and .NET Applications
+description: Simple text notes explaining how to create Dockerfiles for React.js, Java, and .NET apps.
+---
+
+---
+
+# 🐳 How to Create Dockerfile for React.js, Java, and .NET Applications
+
+This note explains how to write **Dockerfiles** for different types of applications — **React.js**, **Java**, and **.NET** — so they can run inside Docker containers.
+
+---
+
+## ⚛️ React.js Dockerfile
+
+React is a front-end framework built with Node.js, so we use a Node base image to build and serve the app.
+
+**Example Dockerfile:**
+
+```
+# Step 1: Build the React app
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Step 2: Serve the app using Nginx
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+**Explanation:**
+
+- The first stage installs dependencies and builds the React app.
+- The second stage serves the static build using **Nginx**.
+- This multi-stage build reduces image size and improves performance.
+
+---
+
+## ☕ Java (Spring Boot) Dockerfile
+
+For Java apps (especially Spring Boot), we use a base image with OpenJDK.
+
+**Example Dockerfile:**
+
+```
+# Use an OpenJDK base image
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+
+# Copy the jar file (generated from mvn package or gradle build)
+COPY target/myapp.jar /app/myapp.jar
+
+# Expose the application port
+EXPOSE 8080
+
+# Run the Java application
+ENTRYPOINT ["java", "-jar", "myapp.jar"]
+```
+
+**Explanation:**
+
+- The `COPY` command copies your built `.jar` file into the container.
+- The container runs `java -jar myapp.jar` when started.
+- Exposes port 8080 for web access.
+
+---
+
+## ⚙️ .NET (ASP.NET Core) Dockerfile
+
+For .NET Core web applications, we use Microsoft’s official .NET SDK and runtime images.
+
+**Example Dockerfile:**
+
+```
+# Step 1: Build the .NET app
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /source
+COPY . .
+RUN dotnet restore
+RUN dotnet publish -c Release -o /app/publish
+
+# Step 2: Run the published app
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/publish .
+EXPOSE 80
+ENTRYPOINT ["dotnet", "MyApp.dll"]
+```
+
+**Explanation:**
+
+- The build stage compiles the .NET project and publishes it to a folder.
+- The runtime stage uses a lightweight image to run the app.
+- Exposes port 80 for the web server.
+
+---
